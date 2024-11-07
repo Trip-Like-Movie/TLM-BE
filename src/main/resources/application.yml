@@ -2,7 +2,7 @@ spring:
   application:
     name: TripLikeMovie
   datasource:
-    url: jdbc:h2:mem:test
+    url: jdbc:h2:tcp://localhost/~/test
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -10,6 +10,35 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    com.yourpackage: DEBUG
+    org.hibernate.SQL: DEBUG           # 쿼리문을 출력
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # 쿼리 파라미터를 출력
+
+auth:
+  jwt:
+    secretKey: ${JWT_SECRET_KEY}
+    accessExp: ${JWT_ACCESS_EXP}
+    refreshExp: ${JWT_REFRESH_EXP}
+    header: ${JWT_HEADER}
+    prefix: ${JWT_PREFIX}
+
+
