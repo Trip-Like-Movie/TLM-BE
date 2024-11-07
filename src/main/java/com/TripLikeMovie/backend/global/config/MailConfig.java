@@ -33,10 +33,11 @@ public class MailConfig {
         Properties properties = new Properties();
         properties.setProperty("mail.transport.protocol", "smtp");
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.debug", "true");
+        properties.put("mail.smtp.starttls.enable", "true"); // TLS 설정
+        properties.put("mail.smtp.starttls.required", "true"); // TLS가 반드시 필요함
         properties.setProperty("mail.smtp.ssl.trust", "smtp.gmail.com");
-        properties.setProperty("mail.smtp.ssl.enable", "true");
+        properties.setProperty("mail.smtp.ssl.enable", "false"); // SSL 비활성화
         return properties;
     }
+
 }

@@ -12,7 +12,7 @@ import lombok.Getter;
 public class ErrorResponse {
 
     private final int status;
-    private final String message;
+    private final Object message;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -21,7 +21,7 @@ public class ErrorResponse {
 
     private final String path;
 
-    public ErrorResponse(int status, String message, String path) {
+    public ErrorResponse(int status, Object message, String path) {
         this.status = status;
         this.message = message;
         this.timestamp = LocalDateTime.now();

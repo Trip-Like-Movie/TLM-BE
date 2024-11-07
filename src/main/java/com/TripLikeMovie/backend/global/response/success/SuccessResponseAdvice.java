@@ -29,7 +29,7 @@ public class SuccessResponseAdvice implements ResponseBodyAdvice<Object> {
         int status = servletResponse.getStatus();
         HttpStatus httpStatus = HttpStatus.resolve(status);
 
-        if (httpStatus == null || httpStatus.is2xxSuccessful()) {
+        if (httpStatus == null || !httpStatus.is2xxSuccessful()) {
             return body;
         }
 
