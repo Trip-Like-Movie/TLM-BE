@@ -14,6 +14,7 @@ public enum ErrorCode {
     FILE_EXCEPTION(400, "파일이 비어 있습니다"),
     BAD_FILE_EXTENSION(400, "확장자가 잘못 되었습니다."),
     PROFILE_DELETE_FAIL(400, "프로필 사진 삭제에 실패하였습니다"),
+    EMAIL_PASSWORD_NOT_MATCH(400, "이메일과 비밀번호가 일치하지 않습니다."),
 
     NOT_PROFILE_IMAGE(400, "프로필 사진이 존재하지 않습니다"),
 
