@@ -35,7 +35,7 @@ public class EmailServiceImpl implements EmailService {
     private final Set<String> verifiedEmails = ConcurrentHashMap.newKeySet();
 
     @Override
-    public void sendVerificationCode(SendVerificationRequest sendVerificationRequest) {
+    public void sendSignUpVerificationCode(SendVerificationRequest sendVerificationRequest) {
 
         String code = generateVerificationCode();
         verificationCods.put(sendVerificationRequest.getEmail(), code);
@@ -63,8 +63,8 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void isEmailVerified(MemberSignUpRequest signUpRequest) {
-        if (!verifiedEmails.contains(signUpRequest.getEmail())) {
+    public void isEmailVerified(String email) {
+        if (!verifiedEmails.contains(email)) {
             throw EmailNotVerifiedException.EXCEPTION;
         }
     }
@@ -72,6 +72,21 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void deleteEmailVerificationCode(String email) {
         verifiedEmails.remove(email);
+    }
+
+    @Override
+    public void sendChangePasswordVerificationCode(String email) {
+        String code = generateVerificationCode();
+        verificationCods.put(email, code);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(email);
+        message.setFrom(formEmail);
+        message.setSubject("비밀번호 찾기 인증 코드");
+        message.setText("인증 코드는 " + code + "입니다.");
+
+        mailSender.send(message);
     }
 
     private String generateVerificationCode() {

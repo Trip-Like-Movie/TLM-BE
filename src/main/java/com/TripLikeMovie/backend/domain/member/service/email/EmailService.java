@@ -6,12 +6,13 @@ import com.TripLikeMovie.backend.domain.member.presentation.dto.request.VerifyEm
 
 public interface EmailService {
 
-    void sendVerificationCode(SendVerificationRequest sendVerificationRequest);
+    void sendSignUpVerificationCode(SendVerificationRequest sendVerificationRequest);
 
     void verifyEmailCode(VerifyEmailCodeRequest verifyEmailCodeRequest);
 
-    void isEmailVerified(MemberSignUpRequest signUpRequest);
+    void isEmailVerified(String email);
 
     void deleteEmailVerificationCode(String email);
 
+    void sendChangePasswordVerificationCode(String email);
 }
