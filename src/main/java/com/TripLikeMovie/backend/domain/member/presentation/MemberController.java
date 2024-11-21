@@ -2,16 +2,19 @@ package com.TripLikeMovie.backend.domain.member.presentation;
 
 import com.TripLikeMovie.backend.domain.credential.presentation.dto.response.AccessTokenAndRefreshTokenDto;
 import com.TripLikeMovie.backend.domain.credential.service.CredentialService;
+import com.TripLikeMovie.backend.domain.member.domain.vo.MemberInfoVo;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.MemberSignUpRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.SendVerificationRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.VerifyEmailCodeRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.VerifyNicknameRequest;
 import com.TripLikeMovie.backend.domain.member.service.MemberService;
 import com.TripLikeMovie.backend.domain.member.service.email.EmailService;
+import com.TripLikeMovie.backend.global.utils.member.MemberUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,7 @@ public class MemberController {
     private final EmailService emailService;
     private final MemberService memberService;
     private final CredentialService credentialService;
+    private final MemberUtils memberUtils;
 
     @PostMapping("/send-verification-code")
     public void sendVerificationCode(
@@ -61,6 +65,11 @@ public class MemberController {
         memberService.signUpSuccess(signUpRequest.getNickname());
 
         return credentialService.signUp(signUpRequest);
+    }
+
+    @GetMapping
+    public MemberInfoVo getMemberInfo() {
+        return memberUtils.getMemberFromSecurityContext().getMemberInfo();
     }
 
 }
