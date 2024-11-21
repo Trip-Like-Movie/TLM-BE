@@ -23,4 +23,9 @@ public class CredentialController {
         return credentialService.login(loginRequest);
     }
 
+    @PostMapping("/logout")
+    public void logout() {
+        credentialService.logoutMember();
+    }
+
 }
