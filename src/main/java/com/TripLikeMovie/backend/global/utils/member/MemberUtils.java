@@ -6,6 +6,6 @@ public interface MemberUtils {
 
     Member getMemberByEmail(String email);
 
-    Member getUserFromSecurityContext();
+    Member getMemberFromSecurityContext();
 
 }

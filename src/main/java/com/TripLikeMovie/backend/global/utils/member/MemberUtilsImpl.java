@@ -19,7 +19,7 @@ public class MemberUtilsImpl implements MemberUtils {
     }
 
     @Override
-    public Member getUserFromSecurityContext() {
+    public Member getMemberFromSecurityContext() {
         Integer currentUserId = SecurityUtils.getCurrentUserId();
         return getMemberById(currentUserId);
     }
