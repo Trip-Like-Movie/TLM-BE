@@ -14,13 +14,17 @@ public class MemberUtilsImpl implements MemberUtils {
     private final MemberRepository memberRepository;
 
     @Override
-    public Member getMemberById(Integer id) {
-        return memberRepository.findById(id).orElseThrow(() -> MemberNotFoundException.EXCEPTION);
+    public Member getMemberByEmail(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(() -> MemberNotFoundException.EXCEPTION);
     }
 
     @Override
     public Member getUserFromSecurityContext() {
         Integer currentUserId = SecurityUtils.getCurrentUserId();
         return getMemberById(currentUserId);
+    }
+
+    private Member getMemberById(Integer id) {
+        return memberRepository.findById(id).orElseThrow(() -> MemberNotFoundException.EXCEPTION);
     }
 }
