@@ -10,4 +10,5 @@ public interface ImageService {
 
     void deleteProfileImage();
 
+    void updateProfileImage(MultipartFile file);
 }

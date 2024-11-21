@@ -64,6 +64,39 @@ public class ImageServiceImpl implements ImageService {
 
     }
 
+    @Override
+    public void updateProfileImage(MultipartFile file) {
+        Member member = memberUtils.getMemberFromSecurityContext();
+
+        // 기존 프로필 이미지 가져오기
+        ProfileImage existingProfileImage = profileImageRepository.findByMemberId(member.getId())
+            .orElse(null);
+
+        // 기존 프로필 이미지가 있으면 파일 삭제 및 엔티티 삭제
+        if (existingProfileImage != null) {
+            File existingFile = new File(existingProfileImage.getImagePath());
+            if (existingFile.exists()) {
+                boolean isDeleted = existingFile.delete(); // 파일 삭제
+                if (!isDeleted) {
+                    throw ProfileImageDeleteException.EXCEPTION;
+                }
+            }
+            profileImageRepository.delete(existingProfileImage); // 엔티티 삭제
+            member.updateProfileImage(null);
+            profileImageRepository.flush();
+        }
+
+        member.updateProfileImage(null);
+
+        // 새로운 이미지 저장
+        String filePath = saveImage(file);
+        ProfileImage newProfileImage = new ProfileImage(filePath, member);
+        profileImageRepository.save(newProfileImage);
+
+        // Member 엔티티 업데이트
+        member.updateProfileImage(newProfileImage);
+    }
+
 
     private String saveImage(MultipartFile file) {
         if (file.isEmpty() || file.getOriginalFilename() == null) {
