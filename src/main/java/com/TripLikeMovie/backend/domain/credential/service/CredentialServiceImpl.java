@@ -2,11 +2,13 @@ package com.TripLikeMovie.backend.domain.credential.service;
 
 import com.TripLikeMovie.backend.domain.credential.domain.RefreshTokenRedisEntity;
 import com.TripLikeMovie.backend.domain.credential.domain.repository.RefreshTokenRedisEntityRepository;
+import com.TripLikeMovie.backend.domain.credential.presentation.dto.request.LoginRequest;
 import com.TripLikeMovie.backend.domain.credential.presentation.dto.response.AccessTokenAndRefreshTokenDto;
 import com.TripLikeMovie.backend.domain.member.domain.Member;
 import com.TripLikeMovie.backend.domain.member.domain.Role;
 import com.TripLikeMovie.backend.domain.member.domain.repository.MemberRepository;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.MemberSignUpRequest;
+import com.TripLikeMovie.backend.global.error.exception.credential.PasswordNotMatchException;
 import com.TripLikeMovie.backend.global.security.JwtTokenProvider;
 import com.TripLikeMovie.backend.global.utils.member.MemberUtils;
 import lombok.AllArgsConstructor;
@@ -26,18 +28,23 @@ public class CredentialServiceImpl implements CredentialService{
     private final RefreshTokenRedisEntityRepository refreshTokenRedisEntityRepository;
     private MemberUtils memberUtils;
     private PasswordEncoder encoder;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Transactional(readOnly = true)
-    public AccessTokenAndRefreshTokenDto login(Integer memberId){
+    public AccessTokenAndRefreshTokenDto login(LoginRequest loginRequest){
 
-        Member member = memberUtils.getMemberById(memberId);
-        String accessToken = jwtTokenProvider.generateAccessToken(memberId, member.getRole());
-        String refreshToken = jwtTokenProvider.generateRefreshToken(memberId, member.getRole());
+        Member member = memberUtils.getMemberByEmail(loginRequest.getEmail());
+
+        validPassword(member.getHashedPassword(), loginRequest.getPassword());
+
+        String accessToken = jwtTokenProvider.generateAccessToken(member.getId(), member.getRole());
+        String refreshToken = jwtTokenProvider.generateRefreshToken(member.getId(), member.getRole());
 
         RefreshTokenRedisEntity refreshTokenRedisEntity = RefreshTokenRedisEntity.builder()
-            .id(memberId.toString())  // memberId를 id로 사용
+            .id(member.getId().toString())  // memberId를 id로 사용
             .refreshToken(refreshToken)  // 생성된 refreshToken 설정
-            .refreshTokenTtl(86400L)  // 1일(86400초) 설정
+            .refreshTokenTtl(jwtTokenProvider.getRefreshTokenTTlSecond())  // 1일(86400초) 설정
             .build();
 
         refreshTokenRedisEntityRepository.save(refreshTokenRedisEntity); // 여기에서 Redis 저장
@@ -49,8 +56,8 @@ public class CredentialServiceImpl implements CredentialService{
     }
 
     public void logoutMember() {
-        Member user = memberUtils.getUserFromSecurityContext();
-        refreshTokenRedisEntityRepository.deleteById(user.getId().toString());
+        Member member = memberUtils.getUserFromSecurityContext();
+        refreshTokenRedisEntityRepository.deleteById(member.getId().toString());
     }
 
     public AccessTokenAndRefreshTokenDto signUp(MemberSignUpRequest signUpRequest) {
@@ -81,6 +88,11 @@ public class CredentialServiceImpl implements CredentialService{
             .refreshToken(refreshToken)
             .build();
     }
+    private void validPassword(String hashedPassword, String password) {
 
+        if(!passwordEncoder.matches(password, hashedPassword)) {
+            throw PasswordNotMatchException.EXCEPTION;
+        }
+    }
 
 }
