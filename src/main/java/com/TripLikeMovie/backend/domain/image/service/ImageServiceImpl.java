@@ -5,6 +5,8 @@ import com.TripLikeMovie.backend.domain.image.domain.repository.ProfileImageRepo
 import com.TripLikeMovie.backend.domain.member.domain.Member;
 import com.TripLikeMovie.backend.global.error.exception.image.BadFileExtensionException;
 import com.TripLikeMovie.backend.global.error.exception.image.FileEmptyException;
+import com.TripLikeMovie.backend.global.error.exception.image.NotProfileImageException;
+import com.TripLikeMovie.backend.global.error.exception.image.ProfileImageDeleteException;
 import com.TripLikeMovie.backend.global.utils.member.MemberUtils;
 import java.io.File;
 import java.io.IOException;
@@ -36,9 +38,32 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void deleteProfileImage() {
+        // 로그인된 사용자의 정보 가져오기
         Member member = memberUtils.getMemberFromSecurityContext();
 
+        // 프로필 이미지 정보 가져오기
+        ProfileImage profileImage = profileImageRepository.findByMemberId(member.getId())
+            .orElseThrow(() -> NotProfileImageException.EXCEPTION);
+
+        // 파일 경로 가져오기
+        String imagePath = profileImage.getImagePath();
+
+        // 파일 삭제
+        File file = new File(imagePath);
+        if (file.exists()) {
+            boolean isDeleted = file.delete();
+            if (!isDeleted) {
+                throw ProfileImageDeleteException.EXCEPTION;
+            }
+        }
+
+        // ProfileImage 엔티티 삭제
+        profileImageRepository.delete(profileImage);
+
+        member.updateProfileImage(null); // Member에서 프로필 이미지 제거
+
     }
+
 
     private String saveImage(MultipartFile file) {
         if (file.isEmpty() || file.getOriginalFilename() == null) {
