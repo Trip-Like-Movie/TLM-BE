@@ -58,4 +58,8 @@ public class Member {
     public void updateProfileImage(ProfileImage profileImage) {
         this.profileImage = profileImage;
     }
+
+    public void changePassword(String encodedPassword) {
+        this.hashedPassword = encodedPassword;
+    }
 }
