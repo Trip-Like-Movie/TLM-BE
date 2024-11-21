@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,11 @@ public class ImageController {
     @DeleteMapping("/profile")
     public void deleteProfileImage() {
         imageService.deleteProfileImage();
+    }
+
+    @PutMapping("/profile")
+    public void updateProfileImage(@RequestPart MultipartFile file) {
+        imageService.updateProfileImage(file);
     }
 
 }
