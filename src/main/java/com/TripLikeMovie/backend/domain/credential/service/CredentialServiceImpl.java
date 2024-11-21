@@ -26,12 +26,9 @@ public class CredentialServiceImpl implements CredentialService{
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRedisEntityRepository refreshTokenRedisEntityRepository;
-    private MemberUtils memberUtils;
-    private PasswordEncoder encoder;
-    private final PasswordEncoder passwordEncoder;
+    private final MemberUtils memberUtils;
+    private final PasswordEncoder encoder;
 
-
-    @Transactional(readOnly = true)
     public AccessTokenAndRefreshTokenDto login(LoginRequest loginRequest){
 
         Member member = memberUtils.getMemberByEmail(loginRequest.getEmail());
@@ -56,7 +53,7 @@ public class CredentialServiceImpl implements CredentialService{
     }
 
     public void logoutMember() {
-        Member member = memberUtils.getUserFromSecurityContext();
+        Member member = memberUtils.getMemberFromSecurityContext();
         refreshTokenRedisEntityRepository.deleteById(member.getId().toString());
     }
 
@@ -76,12 +73,12 @@ public class CredentialServiceImpl implements CredentialService{
         String accessToken = jwtTokenProvider.generateAccessToken(member.getId(), member.getRole());
 
         RefreshTokenRedisEntity refreshTokenRedisEntity = RefreshTokenRedisEntity.builder()
-            .id(member.getId().toString())  // memberId를 id로 사용
-            .refreshToken(refreshToken)  // 생성된 refreshToken 설정
-            .refreshTokenTtl(86400L)  // 1일(86400초) 설정
+            .id(member.getId().toString())
+            .refreshToken(refreshToken)
+            .refreshTokenTtl(jwtTokenProvider.getRefreshTokenTTlSecond())
             .build();
 
-        refreshTokenRedisEntityRepository.save(refreshTokenRedisEntity); // 여기에서 Redis 저장
+        refreshTokenRedisEntityRepository.save(refreshTokenRedisEntity);
 
         return AccessTokenAndRefreshTokenDto.builder()
             .accessToken(accessToken)
@@ -90,7 +87,7 @@ public class CredentialServiceImpl implements CredentialService{
     }
     private void validPassword(String hashedPassword, String password) {
 
-        if(!passwordEncoder.matches(password, hashedPassword)) {
+        if(!encoder.matches(password, hashedPassword)) {
             throw PasswordNotMatchException.EXCEPTION;
         }
     }
