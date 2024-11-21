@@ -41,14 +41,14 @@ public class JwtTokenProvider {
         final Date issuedAt = new Date();
         final Date accessTokenExpiresIn =
             new Date(issuedAt.getTime() + jwtProperties.getAccessExp() * 1000);
-        return createAccessToken(id, issuedAt, role, accessTokenExpiresIn);
+        return jwtProperties.getPrefix() + " " + createAccessToken(id, issuedAt, role, accessTokenExpiresIn);
     }
 
     public String generateRefreshToken(Integer id, Role role) {
         final Date issuedAt = new Date();
         final Date refreshTokenExpiresIn =
             new Date(issuedAt.getTime() + jwtProperties.getRefreshExp() * 1000);
-        return createRefreshToken(id, issuedAt, role, refreshTokenExpiresIn);
+        return jwtProperties.getPrefix() + " " + createRefreshToken(id, issuedAt, role, refreshTokenExpiresIn);
     }
 
     public String resolveToken(HttpServletRequest request) {
@@ -57,15 +57,18 @@ public class JwtTokenProvider {
         if (rawHeader != null
             && rawHeader.length() > jwtProperties.getPrefix().length()
             && rawHeader.startsWith(jwtProperties.getPrefix())) {
-            return rawHeader.substring(jwtProperties.getPrefix().length());
+            return rawHeader.substring(jwtProperties.getPrefix().length() + 1);
         }
         return null;
     }
 
     public Authentication getAuthentication(String token) {
-        String id = getClaims(token).getSubject();
+
+        String id = (String)getClaims(token).get(ID);
         String role = (String) getClaims(token).get(ROLE);
+
         UserDetails userDetails = new AuthDetails(id, role);
+
         return new UsernamePasswordAuthenticationToken(
             userDetails, "", userDetails.getAuthorities());
     }
