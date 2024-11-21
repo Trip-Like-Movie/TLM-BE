@@ -1,5 +1,8 @@
 package com.TripLikeMovie.backend.domain.member.domain;
 
+import com.TripLikeMovie.backend.domain.image.domain.ProfileImage;
+import com.TripLikeMovie.backend.domain.member.domain.vo.MemberInfoVo;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -7,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -39,4 +43,19 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ProfileImage profileImage;
+
+    public MemberInfoVo getMemberInfo() {
+        return MemberInfoVo.builder()
+            .id(id)
+            .email(email)
+            .nickname(nickname)
+            .profileImage(profileImage.getImagePath())
+            .build();
+    }
+
+    public void updateProfileImage(ProfileImage profileImage) {
+        this.profileImage = profileImage;
+    }
 }
