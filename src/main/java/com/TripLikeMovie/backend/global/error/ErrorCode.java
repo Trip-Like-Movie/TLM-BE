@@ -13,6 +13,9 @@ public enum ErrorCode {
     DUPLICATED_NICKNAME(400, "중복된 닉네임입니다."),
     FILE_EXCEPTION(400, "파일이 비어 있습니다"),
     BAD_FILE_EXTENSION(400, "확장자가 잘못 되었습니다."),
+    PROFILE_DELETE_FAIL(400, "프로필 사진 삭제에 실패하였습니다"),
+
+    NOT_PROFILE_IMAGE(400, "프로필 사진이 존재하지 않습니다"),
 
     INVALID_TOKEN(401, "토큰이 유효하지 않습니다."),
     EXPIRED_TOKEN(401, "토큰이 만료되었습니다."),
