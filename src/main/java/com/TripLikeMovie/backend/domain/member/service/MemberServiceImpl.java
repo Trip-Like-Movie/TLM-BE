@@ -2,6 +2,7 @@ package com.TripLikeMovie.backend.domain.member.service;
 
 import com.TripLikeMovie.backend.domain.member.domain.Member;
 import com.TripLikeMovie.backend.domain.member.domain.repository.MemberRepository;
+import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangeNicknameRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePasswordRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePasswordVerifyEmailRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.SendVerificationRequest;
@@ -10,6 +11,7 @@ import com.TripLikeMovie.backend.global.error.exception.member.DuplicatedEmailEx
 import com.TripLikeMovie.backend.global.error.exception.member.DuplicatedNicknameException;
 import com.TripLikeMovie.backend.global.error.exception.member.EmailPasswordNotMatchException;
 import com.TripLikeMovie.backend.global.error.exception.member.MemberNotFoundException;
+import com.TripLikeMovie.backend.global.utils.member.MemberUtils;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ public class MemberServiceImpl implements MemberService {
     private final Set<String> nicknameSet = ConcurrentHashMap.newKeySet();
 
     private final PasswordEncoder encoder;
+
+    private final MemberUtils memberUtils;
 
     @Override
     @Transactional(readOnly = true)
@@ -73,6 +77,17 @@ public class MemberServiceImpl implements MemberService {
 
         String encodedPassword = encoder.encode(changePasswordRequest.getPassword());
         member.changePassword(encodedPassword);
+        memberRepository.save(member);
+    }
+
+    @Override
+    public void changeNickname(ChangeNicknameRequest changeNicknameRequest) {
+        memberRepository.findByNickname(changeNicknameRequest.getNickname()).ifPresent(member -> {
+            throw DuplicatedNicknameException.EXCEPTION;
+        });
+        Member member = memberUtils.getMemberFromSecurityContext();
+
+        member.changeNickname(changeNicknameRequest.getNickname());
         memberRepository.save(member);
     }
 }

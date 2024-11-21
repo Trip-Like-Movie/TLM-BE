@@ -62,4 +62,8 @@ public class Member {
     public void changePassword(String encodedPassword) {
         this.hashedPassword = encodedPassword;
     }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

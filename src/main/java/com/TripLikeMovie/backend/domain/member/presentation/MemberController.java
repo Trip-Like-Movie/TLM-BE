@@ -3,6 +3,7 @@ package com.TripLikeMovie.backend.domain.member.presentation;
 import com.TripLikeMovie.backend.domain.credential.presentation.dto.response.AccessTokenAndRefreshTokenDto;
 import com.TripLikeMovie.backend.domain.credential.service.CredentialService;
 import com.TripLikeMovie.backend.domain.member.domain.vo.MemberInfoVo;
+import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangeNicknameRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePasswordRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePasswordVerifyEmailRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.MemberSignUpRequest;
@@ -90,6 +91,11 @@ public class MemberController {
     public void changePassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest) {
         emailService.isEmailVerified(changePasswordRequest.getEmail());
         memberService.changePassword(changePasswordRequest);
+    }
+
+    @PatchMapping("/change-nickname")
+    public void changeNickname(@Valid @RequestBody ChangeNicknameRequest changeNicknameRequest) {
+        memberService.changeNickname(changeNicknameRequest);
     }
 
 }
