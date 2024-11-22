@@ -15,6 +15,8 @@ public enum ErrorCode {
     BAD_FILE_EXTENSION(400, "확장자가 잘못 되었습니다."),
     PROFILE_DELETE_FAIL(400, "프로필 사진 삭제에 실패하였습니다"),
     EMAIL_PASSWORD_NOT_MATCH(400, "이메일과 비밀번호가 일치하지 않습니다."),
+    MOVIE_NOT_FOUND(400, "영화가 존재하지 않습니다."),
+    DUPLICATED_MOVIE_TITLE(400, "중복된 제목입니다."),
 
     NOT_PROFILE_IMAGE(400, "프로필 사진이 존재하지 않습니다"),
 
