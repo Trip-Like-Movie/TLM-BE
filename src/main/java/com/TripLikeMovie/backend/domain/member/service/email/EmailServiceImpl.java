@@ -1,11 +1,12 @@
 package com.TripLikeMovie.backend.domain.member.service.email;
 
 
-import com.TripLikeMovie.backend.domain.member.presentation.dto.request.MemberSignUpRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.SendVerificationRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.VerifyEmailCodeRequest;
 import com.TripLikeMovie.backend.global.error.exception.email.EmailNotVerifiedException;
 import com.TripLikeMovie.backend.global.error.exception.email.InvalidVerificationCodeException;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Set;
@@ -13,8 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -25,7 +26,7 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
-    private String formEmail;
+    private String fromEmail;
 
     private static final int CODE_LENGTH = 6;
     private static final String NUMERIC_CHARACTERS = "0123456789";
@@ -36,18 +37,62 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendSignUpVerificationCode(SendVerificationRequest sendVerificationRequest) {
-
         String code = generateVerificationCode();
         verificationCods.put(sendVerificationRequest.getEmail(), code);
 
-        SimpleMailMessage message = new SimpleMailMessage();
+        String subject = "회원가입 인증 코드";
+        String content = buildHtmlContent(code);
 
-        message.setTo(sendVerificationRequest.getEmail());
-        message.setFrom(formEmail);
-        message.setSubject("회원가입 인증 코드");
-        message.setText("인증 코드는 " + code + "입니다.");
+        sendHtmlEmail(sendVerificationRequest.getEmail(), subject, content);
+    }
 
-        mailSender.send(message);
+    private String buildHtmlContent(String code) {
+        return String.format("""
+            <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #0169ff;">
+                    <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                        <div style="padding: 20px; background: #0169ff; color: white; text-align: center;">
+                            <h1 style="margin: 0; font-size: 24px;">TripLikeMovie</h1>
+                            <p style="margin: 5px 0; font-size: 16px;">영화같은 여행을 시작해보세요</p>
+                        </div>
+                        <div style="padding: 30px;">
+                            <h2 style="color: #333; font-size: 20px; margin-bottom: 20px;">이메일 인증 안내</h2>
+                            <p style="font-size: 16px; color: #555; margin-bottom: 15px;">
+                                아래 인증 코드를 입력해주세요 인증 코드는 10분간 유효합니다.
+                            </p>
+                            <div style="text-align: center; margin: 20px 0;">
+                                <span style="display: inline-block; font-size: 24px; font-weight: bold; color: #0169ff; padding: 10px 20px; background: #f1f1f1; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                                    %s
+                                </span>
+                            </div>
+                            <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
+                                본 이메일은 자동 발신되었으며, 회신하지 마세요. 인증 코드는 타인과 공유하지 마십시오.
+                            </p>
+                        </div>
+                    </div>
+                    <footer style="text-align: center; font-size: 12px; color: #aaa; margin-top: 10px;">
+                        &copy; 2024 TripLikeMovie. All Rights Reserved.
+                    </footer>
+                </body>
+            </html>
+           """, code);
+    }
+
+
+    private void sendHtmlEmail(String to, String subject, String content) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(fromEmail);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(content, true); // true로 설정해야 HTML로 전송됨
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException("이메일 전송에 실패했습니다.", e);
+        }
     }
 
     @Override
@@ -79,14 +124,10 @@ public class EmailServiceImpl implements EmailService {
         String code = generateVerificationCode();
         verificationCods.put(email, code);
 
-        SimpleMailMessage message = new SimpleMailMessage();
+        String subject = "비밀번호 찾기 인증 코드";
+        String content = buildHtmlContent(code);
 
-        message.setTo(email);
-        message.setFrom(formEmail);
-        message.setSubject("비밀번호 찾기 인증 코드");
-        message.setText("인증 코드는 " + code + "입니다.");
-
-        mailSender.send(message);
+        sendHtmlEmail(email, subject, content);
     }
 
     private String generateVerificationCode() {
@@ -98,5 +139,4 @@ public class EmailServiceImpl implements EmailService {
         }
         return code.toString();
     }
-
 }
