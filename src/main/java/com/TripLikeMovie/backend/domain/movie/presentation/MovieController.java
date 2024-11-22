@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/movie")
+@RequestMapping("api/v1/movies")
 public class MovieController {
 
     private final MovieService movieService;
@@ -40,11 +41,16 @@ public class MovieController {
             CreateMovieRequest.class);
 
         movieService.duplicateTitle(createMovieRequest.getTitle());
+        movieService.createMovie(createMovieRequest.getTitle(), moviePoster);
 
-        String filePath = imageUtils.saveImage(moviePoster, "movies/");
+    }
 
-        movieService.createMovie(createMovieRequest.getTitle(), filePath);
-
+    @PatchMapping(value = "/{movieId}", consumes = "multipart/form-data")
+    public void updateMovieImage(
+        @PathVariable Integer movieId,
+        @RequestPart("moviePoster") MultipartFile moviePoster
+    ) {
+        movieService.updateMoviePoster(movieId, moviePoster);
     }
 
 }
