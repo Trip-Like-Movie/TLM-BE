@@ -5,6 +5,7 @@ import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePa
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePasswordVerifyEmailRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.SendVerificationRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.VerifyNicknameRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
 
@@ -19,4 +20,8 @@ public interface MemberService {
     void changePassword(ChangePasswordRequest changePasswordRequest);
 
     void changeNickname(ChangeNicknameRequest changeNicknameRequest);
+
+    void deleteProfileImage();
+
+    void updateProfileImage(MultipartFile file);
 }

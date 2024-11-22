@@ -7,11 +7,15 @@ import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePa
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePasswordVerifyEmailRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.SendVerificationRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.VerifyNicknameRequest;
+import com.TripLikeMovie.backend.global.error.exception.image.NotProfileImageException;
+import com.TripLikeMovie.backend.global.error.exception.image.ProfileImageDeleteException;
 import com.TripLikeMovie.backend.global.error.exception.member.DuplicatedEmailException;
 import com.TripLikeMovie.backend.global.error.exception.member.DuplicatedNicknameException;
 import com.TripLikeMovie.backend.global.error.exception.member.EmailPasswordNotMatchException;
 import com.TripLikeMovie.backend.global.error.exception.member.MemberNotFoundException;
+import com.TripLikeMovie.backend.global.utils.image.ImageUtils;
 import com.TripLikeMovie.backend.global.utils.member.MemberUtils;
+import java.io.File;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -26,12 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
-
     private final Set<String> nicknameSet = ConcurrentHashMap.newKeySet();
-
     private final PasswordEncoder encoder;
-
     private final MemberUtils memberUtils;
+    private final ImageUtils imageUtils;
 
     @Override
     @Transactional(readOnly = true)
@@ -89,5 +92,54 @@ public class MemberServiceImpl implements MemberService {
 
         member.changeNickname(changeNicknameRequest.getNickname());
         memberRepository.save(member);
+    }
+
+
+    @Override
+    public void deleteProfileImage() {
+        Member member = memberUtils.getMemberFromSecurityContext();
+
+        String imagePath = member.getProfileImageUrl();;
+
+        if (imagePath == null) {
+            throw NotProfileImageException.EXCEPTION;
+        }
+        // 파일 삭제
+        File file = new File(imagePath);
+        if (file.exists()) {
+            boolean isDeleted = file.delete();
+            if (!isDeleted) {
+                throw ProfileImageDeleteException.EXCEPTION;
+            }
+        }
+        member.updateProfileImage(null); // Member에서 프로필 이미지 제거
+        memberRepository.flush();
+
+    }
+
+    @Override
+    public void updateProfileImage(MultipartFile file) {
+        Member member = memberUtils.getMemberFromSecurityContext();
+
+        String imagePath = member.getProfileImageUrl();
+
+        // 기존 프로필 이미지가 있으면 파일 삭제 및 엔티티 삭제
+        if (imagePath != null) {
+            File existingFile = new File(imagePath);
+            if (existingFile.exists()) {
+                boolean isDeleted = existingFile.delete(); // 파일 삭제
+                if (!isDeleted) {
+                    throw ProfileImageDeleteException.EXCEPTION;
+                }
+            }
+        }
+
+        // 새로운 이미지 저장
+        String filePath = imageUtils.saveImage(file, "profiles/");
+
+        // Member 엔티티 업데이트
+        member.updateProfileImage(filePath);
+        memberRepository.flush();
+
     }
 }
