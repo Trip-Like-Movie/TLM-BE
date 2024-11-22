@@ -2,9 +2,11 @@ package com.TripLikeMovie.backend.domain.movie.service;
 
 import com.TripLikeMovie.backend.domain.movie.domain.Movie;
 import com.TripLikeMovie.backend.domain.movie.domain.repository.MovieRepository;
+import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
 import com.TripLikeMovie.backend.global.error.exception.movie.DuplicatedMovieTitleException;
 import com.TripLikeMovie.backend.global.error.exception.movie.NotFoundMovieException;
 import com.TripLikeMovie.backend.global.utils.image.ImageUtils;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,5 +55,20 @@ public class MovieServiceImpl implements MovieService {
         String filePath = imageUtils.saveImage(moviePoster, "movies/");
 
         movie.updateImageUrl(filePath);
+    }
+
+    @Override
+    public List<MovieInfoVo> findByTitle(String title) {
+            // title이 null 또는 비어 있으면 모든 영화 반환
+            if (title == null || title.trim().isEmpty()) {
+                return movieRepository.findAll().stream()
+                    .map(Movie ::getMovieInfo)
+                    .toList();
+            }
+
+            // title이 주어졌다면 검색
+            return movieRepository.findByTitleContainingIgnoreCase(title).stream()
+                .map(Movie :: getMovieInfo)
+                .toList();
     }
 }

@@ -2,6 +2,8 @@ package com.TripLikeMovie.backend.domain.movie.service;
 
 
 import com.TripLikeMovie.backend.domain.movie.domain.Movie;
+import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
+import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface MovieService {
@@ -13,4 +15,6 @@ public interface MovieService {
     void createMovie(String title, MultipartFile filePath);
 
     void updateMoviePoster(Integer movieId, MultipartFile moviePoster);
+
+    List<MovieInfoVo> findByTitle(String title);
 }
