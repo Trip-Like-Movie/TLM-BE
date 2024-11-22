@@ -1,7 +1,7 @@
 package com.TripLikeMovie.backend.domain.credential.presentation;
 
 import com.TripLikeMovie.backend.domain.credential.presentation.dto.request.LoginRequest;
-import com.TripLikeMovie.backend.domain.credential.presentation.dto.response.AccessTokenAndRefreshTokenDto;
+import com.TripLikeMovie.backend.domain.credential.presentation.dto.response.AccessTokenDto;
 import com.TripLikeMovie.backend.domain.credential.service.CredentialService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +19,8 @@ public class CredentialController {
     private final CredentialService credentialService;
 
     @PostMapping("/login")
-    public AccessTokenAndRefreshTokenDto login(@RequestBody LoginRequest loginRequest) {
+    public AccessTokenDto login(@RequestBody LoginRequest loginRequest) {
         return credentialService.login(loginRequest);
-    }
-
-    @PostMapping("/logout")
-    public void logout() {
-        credentialService.logoutMember();
     }
 
 }

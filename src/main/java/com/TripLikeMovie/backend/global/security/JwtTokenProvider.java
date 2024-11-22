@@ -1,9 +1,7 @@
 package com.TripLikeMovie.backend.global.security;
 
 import com.TripLikeMovie.backend.domain.member.domain.Role;
-import com.TripLikeMovie.backend.global.error.exception.auth.ExpiredTokenException;
 import com.TripLikeMovie.backend.global.error.exception.auth.InvalidTokenException;
-import com.TripLikeMovie.backend.global.error.exception.auth.RefreshTokenExpiredException;
 import com.TripLikeMovie.backend.global.property.JwtProperties;
 import com.TripLikeMovie.backend.global.security.auth.AuthDetails;
 import io.jsonwebtoken.Claims;
@@ -44,13 +42,6 @@ public class JwtTokenProvider {
         return jwtProperties.getPrefix() + " " + createAccessToken(id, issuedAt, role, accessTokenExpiresIn);
     }
 
-    public String generateRefreshToken(Integer id, Role role) {
-        final Date issuedAt = new Date();
-        final Date refreshTokenExpiresIn =
-            new Date(issuedAt.getTime() + jwtProperties.getRefreshExp() * 1000);
-        return jwtProperties.getPrefix() + " " + createRefreshToken(id, issuedAt, role, refreshTokenExpiresIn);
-    }
-
     public String resolveToken(HttpServletRequest request) {
         String rawHeader = request.getHeader(jwtProperties.getHeader());
 
@@ -73,26 +64,6 @@ public class JwtTokenProvider {
             userDetails, "", userDetails.getAuthorities());
     }
 
-    public Long getRefreshTokenTTlSecond() {
-        return jwtProperties.getRefreshExp();
-    }
-
-    public boolean isRefreshToken(String token) {
-        return getClaims(token).get(TYPE).equals(REFRESH_TOKEN);
-    }
-
-    public Long parseRefreshToken(String token) {
-        try {
-            if (isRefreshToken(token)) {
-                Claims claims = getClaims(token);
-                return Long.parseLong(claims.getSubject());
-            }
-        } catch (ExpiredTokenException e) {
-            throw RefreshTokenExpiredException.EXCEPTION;
-        }
-        throw InvalidTokenException.EXCEPTION;
-    }
-
 
     private String createAccessToken(Integer id, Date issuedAt, Role role, Date tokenExpiresIn) {
 
@@ -101,19 +72,6 @@ public class JwtTokenProvider {
             .claim(ISSUER, ISSUER_VALUE)
             .claim(ID, id.toString())
             .claim(TYPE, ACCESS_TOKEN)
-            .claim(ROLE, role.getValue())
-            .issuedAt(issuedAt)
-            .expiration(tokenExpiresIn)
-            .signWith(getSecretKey())
-            .compact();
-    }
-
-    private String createRefreshToken(Integer id, Date issuedAt, Role role, Date tokenExpiresIn) {
-
-        return Jwts.builder()
-            .claim(ISSUER, ISSUER_VALUE)
-            .claim(ID, id.toString())
-            .claim(TYPE, REFRESH_TOKEN)
             .claim(ROLE, role.getValue())
             .issuedAt(issuedAt)
             .expiration(tokenExpiresIn)

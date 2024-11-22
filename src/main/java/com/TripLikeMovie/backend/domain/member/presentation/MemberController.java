@@ -1,6 +1,6 @@
 package com.TripLikeMovie.backend.domain.member.presentation;
 
-import com.TripLikeMovie.backend.domain.credential.presentation.dto.response.AccessTokenAndRefreshTokenDto;
+import com.TripLikeMovie.backend.domain.credential.presentation.dto.response.AccessTokenDto;
 import com.TripLikeMovie.backend.domain.credential.service.CredentialService;
 import com.TripLikeMovie.backend.domain.member.domain.vo.MemberInfoVo;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangeNicknameRequest;
@@ -63,7 +63,7 @@ public class MemberController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AccessTokenAndRefreshTokenDto signUp(
+    public AccessTokenDto signUp(
         @Valid @RequestBody MemberSignUpRequest signUpRequest) {
 
         emailService.isEmailVerified(signUpRequest.getEmail());

@@ -12,7 +12,6 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class AccessTokenAndRefreshTokenDto {
+public class AccessTokenDto {
     private String accessToken;
-    private String refreshToken;
 }
