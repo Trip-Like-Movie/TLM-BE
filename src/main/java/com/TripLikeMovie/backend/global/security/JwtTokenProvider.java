@@ -28,11 +28,7 @@ public class JwtTokenProvider {
     private final JwtProperties jwtProperties;
 
     private final String ROLE = "role";
-    private final String TYPE = "type";
-    private final String ISSUER = "issuer";
-    private final String ISSUER_VALUE = "TripLikeMovie";
     private final String ID = "id";
-    private final String REFRESH_TOKEN = "refresh-token";
 
 
     public String generateAccessToken(Integer id, Role role) {
@@ -68,6 +64,9 @@ public class JwtTokenProvider {
     private String createAccessToken(Integer id, Date issuedAt, Role role, Date tokenExpiresIn) {
 
         String ACCESS_TOKEN = "access-token";
+        String ISSUER_VALUE = "TripLikeMovie";
+        String ISSUER = "issuer";
+        String TYPE = "type";
         return Jwts.builder()
             .claim(ISSUER, ISSUER_VALUE)
             .claim(ID, id.toString())
