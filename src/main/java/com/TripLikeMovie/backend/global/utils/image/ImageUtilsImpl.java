@@ -2,13 +2,16 @@ package com.TripLikeMovie.backend.global.utils.image;
 
 import com.TripLikeMovie.backend.global.error.exception.image.BadFileExtensionException;
 import com.TripLikeMovie.backend.global.error.exception.image.FileEmptyException;
+import com.TripLikeMovie.backend.global.error.exception.image.ProfileImageDeleteException;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@Slf4j
 public class ImageUtilsImpl implements ImageUtils {
 
     public String saveImage(MultipartFile file, String path) {
@@ -29,7 +32,7 @@ public class ImageUtilsImpl implements ImageUtils {
         }
 
         String randomName = UUID.randomUUID().toString();
-        String filePath = uploadsDir +  randomName + "." + ext;
+        String filePath = uploadsDir + randomName + "." + ext;
 
         try {
             file.transferTo(new File(filePath));
@@ -38,5 +41,18 @@ public class ImageUtilsImpl implements ImageUtils {
         }
 
         return filePath;
+    }
+
+    @Override
+    public void deleteImage(String imageUrl) {
+        if (imageUrl != null) {
+            File existingFile = new File(imageUrl);
+            if (existingFile.exists()) {
+                boolean isDeleted = existingFile.delete();
+                if (!isDeleted) {
+                    throw ProfileImageDeleteException.EXCEPTION;
+                }
+            }
+        }
     }
 }
