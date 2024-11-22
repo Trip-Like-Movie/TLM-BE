@@ -17,13 +17,16 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/members")
@@ -96,6 +99,16 @@ public class MemberController {
     @PatchMapping("/change-nickname")
     public void changeNickname(@Valid @RequestBody ChangeNicknameRequest changeNicknameRequest) {
         memberService.changeNickname(changeNicknameRequest);
+    }
+
+    @DeleteMapping("/profile-image")
+    public void deleteProfileImage() {
+        memberService.deleteProfileImage();
+    }
+
+    @PatchMapping("/profile-image")
+    public void updateProfileImage(@RequestPart MultipartFile file) {
+        memberService.updateProfileImage(file);
     }
 
 }
