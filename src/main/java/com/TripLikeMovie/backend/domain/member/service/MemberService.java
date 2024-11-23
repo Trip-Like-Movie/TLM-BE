@@ -6,6 +6,8 @@ import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePa
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePasswordVerifyEmailRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.SendVerificationRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.VerifyNicknameRequest;
+import com.TripLikeMovie.backend.domain.post.presentation.dto.response.MemberAllPost;
+import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
@@ -27,4 +29,6 @@ public interface MemberService {
     void updateProfileImage(MultipartFile file);
 
     Member findById(Integer memberId);
+
+    List<MemberAllPost> getAllPosts(Integer memberId);
 }

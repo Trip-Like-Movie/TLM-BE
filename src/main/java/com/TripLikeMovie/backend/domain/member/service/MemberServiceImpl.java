@@ -7,6 +7,9 @@ import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePa
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePasswordVerifyEmailRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.SendVerificationRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.VerifyNicknameRequest;
+import com.TripLikeMovie.backend.domain.post.domain.Post;
+import com.TripLikeMovie.backend.domain.post.domain.vo.PostInfoVo;
+import com.TripLikeMovie.backend.domain.post.presentation.dto.response.MemberAllPost;
 import com.TripLikeMovie.backend.global.error.exception.image.NotProfileImageException;
 import com.TripLikeMovie.backend.global.error.exception.image.ProfileImageDeleteException;
 import com.TripLikeMovie.backend.global.error.exception.member.DuplicatedEmailException;
@@ -16,8 +19,10 @@ import com.TripLikeMovie.backend.global.error.exception.member.MemberNotFoundExc
 import com.TripLikeMovie.backend.global.utils.image.ImageUtils;
 import com.TripLikeMovie.backend.global.utils.member.MemberUtils;
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -138,5 +143,24 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member findById(Integer memberId) {
         return memberRepository.findById(memberId).orElseThrow(() -> MemberNotFoundException.EXCEPTION);
+    }
+
+    @Override
+    public List<MemberAllPost> getAllPosts(Integer memberId) {
+        Member member = findById(memberId);
+        List<Post> posts = member.getPosts();
+
+        return posts.stream()
+            .map(post -> {
+                PostInfoVo postInfoVo = post.getPostInfoVo();
+                MemberAllPost memberAllPost = new MemberAllPost();
+                memberAllPost.setId(postInfoVo.getId());
+                memberAllPost.setMovieTitle(postInfoVo.getMovieTitle());
+                memberAllPost.setCommentsSize(postInfoVo.getComments().size());
+                memberAllPost.setFirstImageUrl(postInfoVo.getImageUrls().get(0));
+                memberAllPost.setLikeCount(postInfoVo.getLikeCount());
+                return memberAllPost;
+            })
+            .collect(Collectors.toList()); // 변환된 리스트 반환
     }
 }
