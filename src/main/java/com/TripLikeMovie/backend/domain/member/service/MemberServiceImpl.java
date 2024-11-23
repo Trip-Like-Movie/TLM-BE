@@ -99,7 +99,7 @@ public class MemberServiceImpl implements MemberService {
     public void deleteProfileImage() {
         Member member = memberUtils.getMemberFromSecurityContext();
 
-        String imagePath = member.getProfileImageUrl();
+        String imagePath = member.getImageUrl();
 
         if (imagePath == null) {
             throw NotProfileImageException.EXCEPTION;
@@ -121,7 +121,7 @@ public class MemberServiceImpl implements MemberService {
     public void updateProfileImage(MultipartFile file) {
         Member member = memberUtils.getMemberFromSecurityContext();
 
-        String imagePath = member.getProfileImageUrl();
+        String imagePath = member.getImageUrl();
 
         // 기존 프로필 이미지가 있으면 파일 삭제 및 엔티티 삭제
         imageUtils.deleteImage(imagePath);
