@@ -1,8 +1,9 @@
 package com.TripLikeMovie.backend.domain.member.service.email;
 
-import com.TripLikeMovie.backend.domain.member.presentation.dto.request.MemberSignUpRequest;
+import com.TripLikeMovie.backend.domain.member.domain.Member;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.SendVerificationRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.VerifyEmailCodeRequest;
+import com.TripLikeMovie.backend.domain.post.domain.Post;
 
 public interface EmailService {
 
@@ -15,4 +16,6 @@ public interface EmailService {
     void deleteEmailVerificationCode(String email);
 
     void sendChangePasswordVerificationCode(String email);
+
+    void reportPost(Member member, Post post, String reason);
 }

@@ -1,13 +1,16 @@
 package com.TripLikeMovie.backend.domain.member.service.email;
 
 
+import com.TripLikeMovie.backend.domain.member.domain.Member;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.SendVerificationRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.VerifyEmailCodeRequest;
+import com.TripLikeMovie.backend.domain.post.domain.Post;
 import com.TripLikeMovie.backend.global.error.exception.email.EmailNotVerifiedException;
 import com.TripLikeMovie.backend.global.error.exception.email.InvalidVerificationCodeException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -128,6 +131,46 @@ public class EmailServiceImpl implements EmailService {
         String content = buildHtmlContent(code);
 
         sendHtmlEmail(email, subject, content);
+    }
+
+    @Override
+    public void reportPost(Member member, Post post, String reason) {
+        sendReportNotificationToAdmin(member, post, reason);
+    }
+
+    private void sendReportNotificationToAdmin(Member member, Post post, String reason) {
+        String subject = "새로운 게시물 신고 알림";
+        String content = buildReportEmailContentForAdmin(member, post, reason);
+        sendHtmlEmail("triplikemovie@gmail.com", subject, content);
+    }
+    private String buildReportEmailContentForAdmin(Member member, Post post, String reason) {
+        return String.format("""
+        <html>
+            <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333;">
+                <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                    <div style="padding: 20px; background: #FF5722; color: white; text-align: center;">
+                        <h1 style="margin: 0; font-size: 24px;">TripLikeMovie 신고 알림</h1>
+                        <p style="margin: 5px 0; font-size: 16px;">새로운 게시물 신고가 접수되었습니다.</p>
+                    </div>
+                    <div style="padding: 30px;">
+                        <h2 style="color: #333; font-size: 20px; margin-bottom: 20px;">신고 세부 사항</h2>
+                        <p style="font-size: 16px; color: #555; margin-bottom: 10px;">
+                            <strong>신고자:</strong> %s<br>
+                            <strong>신고된 게시물 번호:</strong> %s<br>
+                            <strong>신고 사유:</strong> %s<br>
+                            <strong>신고 시각:</strong> %s
+                        </p>
+                        <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
+                            신고된 게시물에 대해 신속하게 조치를 취해주세요.
+                        </p>
+                    </div>
+                </div>
+                <footer style="text-align: center; font-size: 12px; color: #aaa; margin-top: 10px;">
+                    &copy; 2024 TripLikeMovie. All Rights Reserved.
+                </footer>
+            </body>
+        </html>
+    """, member.getNickname(), post.getId(), reason, LocalDateTime.now());
     }
 
     private String generateVerificationCode() {
