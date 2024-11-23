@@ -134,4 +134,9 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.flush();
 
     }
+
+    @Override
+    public Member findById(Integer memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> MemberNotFoundException.EXCEPTION);
+    }
 }

@@ -1,5 +1,6 @@
 package com.TripLikeMovie.backend.domain.member.service;
 
+import com.TripLikeMovie.backend.domain.member.domain.Member;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangeNicknameRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePasswordRequest;
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.ChangePasswordVerifyEmailRequest;
@@ -24,4 +25,6 @@ public interface MemberService {
     void deleteProfileImage();
 
     void updateProfileImage(MultipartFile file);
+
+    Member findById(Integer memberId);
 }
