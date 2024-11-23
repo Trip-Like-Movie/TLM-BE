@@ -2,6 +2,7 @@ package com.TripLikeMovie.backend.domain.movie.domain;
 
 import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
 import com.TripLikeMovie.backend.domain.post.domain.Post;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -26,8 +27,8 @@ public class Movie {
 
     private String imageUrl;
 
-    @OneToMany(mappedBy = "movie")
-    private List<Post> posts = new ArrayList<>();
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    private final List<Post> posts = new ArrayList<>();
 
     public Movie(String title, String imageUrl) {
         this.title = title;
