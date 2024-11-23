@@ -1,8 +1,11 @@
 package com.TripLikeMovie.backend.domain.post.presentation;
 
 import com.TripLikeMovie.backend.domain.member.domain.Member;
+import com.TripLikeMovie.backend.domain.member.service.email.EmailService;
 import com.TripLikeMovie.backend.domain.movie.domain.Movie;
 import com.TripLikeMovie.backend.domain.movie.service.MovieService;
+import com.TripLikeMovie.backend.domain.post.domain.Post;
+import com.TripLikeMovie.backend.domain.post.presentation.dto.request.ReportRequest;
 import com.TripLikeMovie.backend.domain.post.presentation.dto.request.UpdatePostRequest;
 import com.TripLikeMovie.backend.domain.post.presentation.dto.request.WritePostRequest;
 import com.TripLikeMovie.backend.domain.post.presentation.dto.response.AllPostResponse;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +36,7 @@ public class PostController {
     private final MemberUtils memberUtils;
     private final ObjectMapper objectMapper;
     private final MovieService movieService;
+    private final EmailService emailService;
 
     @PostMapping(consumes = "multipart/form-data")
     public void writePost(
@@ -56,12 +61,12 @@ public class PostController {
         return postService.findAll();
     }
 
-    @PatchMapping(value = "/{postId}", consumes ="multipart/form-data")
+    @PatchMapping(value = "/{postId}", consumes = "multipart/form-data")
     public void updatePost(
         @PathVariable Integer postId,
         @RequestPart("postData") String postData,
         @RequestPart("images") List<MultipartFile> images
-        ) throws JsonProcessingException {
+    ) throws JsonProcessingException {
 
         UpdatePostRequest updatePostRequest = objectMapper.readValue(postData,
             UpdatePostRequest.class);
@@ -71,6 +76,14 @@ public class PostController {
     @DeleteMapping("/{postId}")
     public void deletePost(@PathVariable Integer postId) {
         postService.deletePost(postId);
+    }
+
+    @PostMapping("/{postId}/report")
+    public void reportPost(@RequestBody ReportRequest reportRequest,
+        @PathVariable("postId") Integer postId) {
+        Member member = memberUtils.getMemberFromSecurityContext();
+        Post post = postService.findById(postId);
+        emailService.reportPost(member, post, reportRequest.getReason());
     }
 
 }
