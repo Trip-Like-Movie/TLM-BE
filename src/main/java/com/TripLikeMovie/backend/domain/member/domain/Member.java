@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,7 +54,7 @@ public class Member {
     private List<Post> posts = new ArrayList<>();
 
     public MemberInfoVo getMemberInfo() {
-
+        // imageUrl이 null일 경우 null을 반환
         String profileImageUrl = (imageUrl != null)
             ? imageUrl.substring(imageUrl.lastIndexOf("TLM-BE/") + 7)
             : null;  // 기본 이미지를 사용하지 않고 null을 반환
@@ -65,16 +66,22 @@ public class Member {
             .map(movie -> MovieInfoVo.builder()
                 .id(movie.getId())
                 .title(movie.getTitle())
+                .imageUrl(movie.getImageUrl()) // Movie의 imageUrl도 포함
                 .build())
             .collect(Collectors.toSet());
+
+        // 정렬: title 기준으로 정렬
+        List<MovieInfoVo> sortedMovies = uniqueMovies.stream()
+            .sorted(Comparator.comparing(MovieInfoVo::getTitle)) // title을 기준으로 정렬
+            .collect(Collectors.toList());
 
         // MemberInfoVo 생성
         return MemberInfoVo.builder()
             .id(id)
             .email(email)
             .nickname(nickname)
-            .imageUrl(profileImageUrl)
-            .movies(uniqueMovies) // 추가된 영화 목록
+            .imageUrl(profileImageUrl) // imageUrl이 null일 경우 null 반환
+            .movies(sortedMovies) // 정렬된 영화 목록
             .build();
     }
 
