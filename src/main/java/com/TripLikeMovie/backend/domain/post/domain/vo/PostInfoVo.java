@@ -15,6 +15,7 @@ public class PostInfoVo {
     private String locationName;
     private String locationAddress;
     private List<CommentVo> comments;
+    private Integer likeCount;
 
     private Integer authorId;
     private String authorNickname;
