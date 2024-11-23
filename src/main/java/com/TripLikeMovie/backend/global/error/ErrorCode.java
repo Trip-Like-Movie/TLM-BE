@@ -17,6 +17,7 @@ public enum ErrorCode {
     EMAIL_PASSWORD_NOT_MATCH(400, "이메일과 비밀번호가 일치하지 않습니다."),
     MOVIE_NOT_FOUND(400, "영화가 존재하지 않습니다."),
     DUPLICATED_MOVIE_TITLE(400, "중복된 제목입니다."),
+    POST_NOT_FOUND(400, "게시글을 찾을 수 없습니다."),
 
     NOT_PROFILE_IMAGE(400, "프로필 사진이 존재하지 않습니다"),
 
