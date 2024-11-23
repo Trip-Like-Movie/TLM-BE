@@ -3,10 +3,10 @@ package com.TripLikeMovie.backend.domain.post.presentation;
 import com.TripLikeMovie.backend.domain.member.domain.Member;
 import com.TripLikeMovie.backend.domain.movie.domain.Movie;
 import com.TripLikeMovie.backend.domain.movie.service.MovieService;
-import com.TripLikeMovie.backend.domain.post.domain.vo.PostInfoVo;
 import com.TripLikeMovie.backend.domain.post.presentation.dto.request.UpdatePostRequest;
 import com.TripLikeMovie.backend.domain.post.presentation.dto.request.WritePostRequest;
 import com.TripLikeMovie.backend.domain.post.presentation.dto.response.AllPostResponse;
+import com.TripLikeMovie.backend.domain.post.presentation.dto.response.DetailPostResponse;
 import com.TripLikeMovie.backend.domain.post.service.PostService;
 import com.TripLikeMovie.backend.global.utils.member.MemberUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -47,8 +47,8 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public PostInfoVo getPost(@PathVariable Integer postId) {
-        return postService.findById(postId).getPostInfoVo();
+    public DetailPostResponse getPost(@PathVariable Integer postId) {
+        return postService.findByIdDetail(postId);
     }
 
     @GetMapping
