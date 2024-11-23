@@ -18,6 +18,7 @@ public enum ErrorCode {
     MOVIE_NOT_FOUND(400, "영화가 존재하지 않습니다."),
     DUPLICATED_MOVIE_TITLE(400, "중복된 제목입니다."),
     POST_NOT_FOUND(400, "게시글을 찾을 수 없습니다."),
+    POST_NOT_MATCH_MEMBER(400, "게시글 작성자가 아닙니다."),
 
     NOT_PROFILE_IMAGE(400, "프로필 사진이 존재하지 않습니다"),
 
