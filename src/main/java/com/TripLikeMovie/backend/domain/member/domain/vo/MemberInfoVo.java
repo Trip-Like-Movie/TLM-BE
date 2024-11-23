@@ -1,7 +1,7 @@
 package com.TripLikeMovie.backend.domain.member.domain.vo;
 
 import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
-import java.util.Set;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,6 +13,6 @@ public class MemberInfoVo {
     private final String email;
     private final String nickname;
     private final String imageUrl;
-    private Set<MovieInfoVo> movies; // 사용자와 관련된 영화 정보
+    private List<MovieInfoVo> movies; // 사용자와 관련된 영화 정보
 
 }
