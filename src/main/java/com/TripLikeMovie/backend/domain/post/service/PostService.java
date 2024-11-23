@@ -18,4 +18,6 @@ public interface PostService {
     List<AllPostResponse> findAll();
 
     void update(Integer postId, UpdatePostRequest updatePostRequest, List<MultipartFile> images);
+
+    void deletePost(Integer postId);
 }

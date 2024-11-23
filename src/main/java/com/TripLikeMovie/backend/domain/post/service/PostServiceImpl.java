@@ -80,12 +80,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> PostNotFoundException.EXCEPTION);
 
-        Member member = post.getMember();
-        Member loginMember = memberUtils.getMemberFromSecurityContext();
-
-        if (!member.equals(loginMember)) {
-            throw PostNotMatchMemberException.EXCEPTION;
-        }
+        checkPostMember(post);
 
         post.update(updatePostRequest.getContent(), updatePostRequest.getLocationName(), updatePostRequest.getLocationAddress());
 
@@ -102,5 +97,28 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    @Override
+    public void deletePost(Integer postId) {
+        Post post = postRepository.findById(postId)
+            .orElseThrow(() -> PostNotFoundException.EXCEPTION);
+        checkPostMember(post);
 
+        List<String> imageUrls = post.getImageUrls();
+
+        for (String imageUrl : imageUrls) {
+            imageUtils.deleteImage(imageUrl);
+        }
+
+        postRepository.delete(post);
+    }
+
+    private void checkPostMember(Post post) {
+        Member member = post.getMember();
+        Member loginMember = memberUtils.getMemberFromSecurityContext();
+
+
+        if (!member.equals(loginMember)) {
+            throw PostNotMatchMemberException.EXCEPTION;
+        }
+    }
 }
