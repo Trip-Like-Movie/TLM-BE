@@ -1,5 +1,6 @@
 package com.TripLikeMovie.backend.domain.post.domain;
 
+import com.TripLikeMovie.backend.domain.comment.domain.Comment;
 import com.TripLikeMovie.backend.domain.member.domain.Member;
 import com.TripLikeMovie.backend.domain.member.domain.vo.MemberInfoVo;
 import com.TripLikeMovie.backend.domain.movie.domain.Movie;
@@ -14,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,9 @@ public class Post {
     @JsonIgnore
     private Movie movie;
 
+    @OneToMany(mappedBy = "post")
+    private final List<Comment> comments = new ArrayList<>();
+
     public Post(Member member, Movie movie, String content, String locationName,
         String locationAddress) {
         this.content = content;
@@ -83,6 +88,9 @@ public class Post {
             .locationName(locationName)
             .imageUrls(imageUrls.stream()
                 .map(imageUrl -> imageUrl.substring(imageUrl.lastIndexOf("TLM-BE/") + 7))
+                .collect(Collectors.toList()))
+            .comments(comments.stream()
+                .map(Comment::getCommentInfo)
                 .collect(Collectors.toList()))
             .movieImageUrl(movieInfo.getImageUrl())
             .movieId(movieInfo.getId())
