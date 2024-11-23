@@ -12,8 +12,10 @@ import com.TripLikeMovie.backend.domain.member.presentation.dto.request.VerifyEm
 import com.TripLikeMovie.backend.domain.member.presentation.dto.request.VerifyNicknameRequest;
 import com.TripLikeMovie.backend.domain.member.service.MemberService;
 import com.TripLikeMovie.backend.domain.member.service.email.EmailService;
+import com.TripLikeMovie.backend.domain.post.presentation.dto.response.MemberAllPost;
 import com.TripLikeMovie.backend.global.utils.member.MemberUtils;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -115,6 +117,11 @@ public class MemberController {
     @PatchMapping("/profile-image")
     public void updateProfileImage(@RequestPart MultipartFile file) {
         memberService.updateProfileImage(file);
+    }
+
+    @GetMapping("/{memberId}/posts")
+    public List<MemberAllPost> getAllPosts(@PathVariable Integer memberId) {
+        return memberService.getAllPosts(memberId);
     }
 
 }
