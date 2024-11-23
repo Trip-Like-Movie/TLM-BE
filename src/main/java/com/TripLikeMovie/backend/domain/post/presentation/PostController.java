@@ -4,7 +4,9 @@ import com.TripLikeMovie.backend.domain.member.domain.Member;
 import com.TripLikeMovie.backend.domain.movie.domain.Movie;
 import com.TripLikeMovie.backend.domain.movie.service.MovieService;
 import com.TripLikeMovie.backend.domain.post.domain.vo.PostInfoVo;
+import com.TripLikeMovie.backend.domain.post.presentation.dto.request.UpdatePostRequest;
 import com.TripLikeMovie.backend.domain.post.presentation.dto.request.WritePostRequest;
+import com.TripLikeMovie.backend.domain.post.presentation.dto.response.AllPostResponse;
 import com.TripLikeMovie.backend.domain.post.service.PostService;
 import com.TripLikeMovie.backend.global.utils.member.MemberUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,12 +43,28 @@ public class PostController {
         Movie movie = movieService.findById(writePostRequest.getMovieId());
 
         postService.writePost(member, movie, writePostRequest, images);
-
     }
 
     @GetMapping("/{postId}")
     public PostInfoVo getPost(@PathVariable Integer postId) {
         return postService.findById(postId).getPostInfoVo();
+    }
+
+    @GetMapping
+    public List<AllPostResponse> getAllPost() {
+        return postService.findAll();
+    }
+
+    @PatchMapping(value = "/{postId}", consumes ="multipart/form-data")
+    public void updatePost(
+        @PathVariable Integer postId,
+        @RequestPart("postData") String postData,
+        @RequestPart("images") List<MultipartFile> images
+        ) throws JsonProcessingException {
+
+        UpdatePostRequest updatePostRequest = objectMapper.readValue(postData,
+            UpdatePostRequest.class);
+        postService.update(postId, updatePostRequest, images);
     }
 
 }
