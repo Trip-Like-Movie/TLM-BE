@@ -7,4 +7,6 @@ import com.TripLikeMovie.backend.domain.post.domain.Post;
 public interface CommentService {
 
     void writeComment(Member member, Post post, WriteCommentRequest writeCommentRequest);
+
+    void deleteComment(Member member, Post post, Integer commentId);
 }
