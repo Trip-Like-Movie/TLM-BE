@@ -1,12 +1,14 @@
 package com.TripLikeMovie.backend.domain.post.domain;
 
 import com.TripLikeMovie.backend.domain.comment.domain.Comment;
+import com.TripLikeMovie.backend.domain.like.domain.Like;
 import com.TripLikeMovie.backend.domain.member.domain.Member;
 import com.TripLikeMovie.backend.domain.member.domain.vo.MemberInfoVo;
 import com.TripLikeMovie.backend.domain.movie.domain.Movie;
 import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
 import com.TripLikeMovie.backend.domain.post.domain.vo.PostInfoVo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,7 +39,7 @@ public class Post {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     @JsonIgnore
     private Member member;
 
@@ -49,12 +51,15 @@ public class Post {
     private String locationName;
 
     @ManyToOne
-    @JoinColumn(name="movie_id")
+    @JoinColumn(name = "movie_id")
     @JsonIgnore
     private Movie movie;
 
     @OneToMany(mappedBy = "post")
     private final List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Like> likes = new ArrayList<>();
 
     public Post(Member member, Movie movie, String content, String locationName,
         String locationAddress) {
@@ -89,6 +94,7 @@ public class Post {
             .imageUrls(imageUrls.stream()
                 .map(imageUrl -> imageUrl.substring(imageUrl.lastIndexOf("TLM-BE/") + 7))
                 .collect(Collectors.toList()))
+            .likeCount(likes.size())
             .comments(comments.stream()
                 .map(Comment::getCommentInfo)
                 .collect(Collectors.toList()))
