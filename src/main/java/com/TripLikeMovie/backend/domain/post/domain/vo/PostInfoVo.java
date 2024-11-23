@@ -1,6 +1,5 @@
 package com.TripLikeMovie.backend.domain.post.domain.vo;
 
-import com.TripLikeMovie.backend.domain.member.domain.vo.MemberInfoVo;
 import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
 import java.util.List;
 import lombok.Builder;
@@ -16,7 +15,11 @@ public class PostInfoVo {
     private String locationName;
     private String locationAddress;
 
+    private Integer authorId;
+    private String authorNickname;
+    private String authorImageUrl;
+
     private MovieInfoVo movieInfo;
 
-    private MemberInfoVo memberInfo;
+
 }

@@ -67,16 +67,19 @@ public class Post {
     }
 
     public PostInfoVo getPostInfoVo() {
+
         return PostInfoVo.builder()
             .content(content)
             .id(id)
             .locationAddress(locationAddress)
             .locationName(locationName)
             .imageUrls(imageUrls.stream()
-                .map(imageUrl -> imageUrl.substring(imageUrl.lastIndexOf("TLM-BE/") + 7))  // 각 imageUrl에 substring 처리
+                .map(imageUrl -> imageUrl.substring(imageUrl.lastIndexOf("TLM-BE/") + 7))
                 .collect(Collectors.toList()))
             .movieInfo(movie.getMovieInfo())
-            .memberInfo(member.getMemberInfo())
+            .authorId(member.getId())
+            .authorNickname(member.getNickname())
+            .authorImageUrl(member.getMemberInfo().getImageUrl())
             .build();
     }
 }
