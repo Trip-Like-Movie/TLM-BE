@@ -1,7 +1,9 @@
 package com.TripLikeMovie.backend.domain.post.domain;
 
 import com.TripLikeMovie.backend.domain.member.domain.Member;
+import com.TripLikeMovie.backend.domain.member.domain.vo.MemberInfoVo;
 import com.TripLikeMovie.backend.domain.movie.domain.Movie;
+import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
 import com.TripLikeMovie.backend.domain.post.domain.vo.PostInfoVo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.ElementCollection;
@@ -68,6 +70,9 @@ public class Post {
 
     public PostInfoVo getPostInfoVo() {
 
+        MemberInfoVo memberInfo = member.getMemberInfo();
+        MovieInfoVo movieInfo = movie.getMovieInfo();
+
         return PostInfoVo.builder()
             .content(content)
             .id(id)
@@ -76,10 +81,18 @@ public class Post {
             .imageUrls(imageUrls.stream()
                 .map(imageUrl -> imageUrl.substring(imageUrl.lastIndexOf("TLM-BE/") + 7))
                 .collect(Collectors.toList()))
-            .movieInfo(movie.getMovieInfo())
-            .authorId(member.getId())
-            .authorNickname(member.getNickname())
-            .authorImageUrl(member.getMemberInfo().getImageUrl())
+            .movieImageUrl(movieInfo.getImageUrl())
+            .movieId(movieInfo.getId())
+            .movieTitle(movie.getTitle())
+            .authorId(memberInfo.getId())
+            .authorNickname(memberInfo.getNickname())
+            .authorImageUrl(memberInfo.getImageUrl())
             .build();
+    }
+
+    public void update(String content, String locationName, String locationAddress) {
+        this.content = content;
+        this.locationName = locationName;
+        this.locationAddress = locationAddress;
     }
 }

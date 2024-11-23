@@ -19,7 +19,7 @@ public class PostInfoVo {
     private String authorNickname;
     private String authorImageUrl;
 
-    private MovieInfoVo movieInfo;
-
-
+    private Integer movieId;
+    private String movieTitle;
+    private String movieImageUrl;
 }
