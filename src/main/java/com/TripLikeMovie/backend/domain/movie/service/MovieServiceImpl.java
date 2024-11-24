@@ -24,8 +24,6 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
     private final ImageUtils imageUtils;
-    private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
 
     @Override
     @Transactional(readOnly = true)
