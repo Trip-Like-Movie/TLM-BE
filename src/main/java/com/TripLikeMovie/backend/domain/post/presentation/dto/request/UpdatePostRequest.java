@@ -8,7 +8,5 @@ import lombok.Setter;
 public class UpdatePostRequest {
 
     String content;
-    String locationName;
-    String locationAddress;
 
 }
