@@ -100,6 +100,8 @@ public class MovieServiceImpl implements MovieService {
                     response.setFirstImageUrl(postInfoVo.getImageUrls().get(0));
                     response.setMovieTitle(movie.getTitle());
                     response.setMemberId(postInfoVo.getAuthorId());
+                    response.setLikedCount(postInfoVo.getLikeCount());
+                    response.setCommentsCount(postInfoVo.getComments().size());
                     response.setMemberNickname(postInfoVo.getAuthorNickname());
                     response.setMemberImageUrl(postInfoVo.getAuthorImageUrl());
                     return response;
