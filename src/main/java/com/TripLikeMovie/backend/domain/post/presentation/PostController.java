@@ -61,16 +61,12 @@ public class PostController {
         return postService.findAll();
     }
 
-    @PatchMapping(value = "/{postId}", consumes = "multipart/form-data")
+    @PatchMapping(value = "/{postId}")
     public void updatePost(
         @PathVariable Integer postId,
-        @RequestPart("postData") String postData,
-        @RequestPart("images") List<MultipartFile> images
-    ) throws JsonProcessingException {
-
-        UpdatePostRequest updatePostRequest = objectMapper.readValue(postData,
-            UpdatePostRequest.class);
-        postService.update(postId, updatePostRequest, images);
+        @RequestBody UpdatePostRequest updatePostRequest
+    ) {
+        postService.update(postId, updatePostRequest);
     }
 
     @DeleteMapping("/{postId}")
