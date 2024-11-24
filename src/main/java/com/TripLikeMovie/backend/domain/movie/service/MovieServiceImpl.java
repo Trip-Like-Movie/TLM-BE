@@ -1,12 +1,17 @@
 package com.TripLikeMovie.backend.domain.movie.service;
 
+import com.TripLikeMovie.backend.domain.member.domain.repository.MemberRepository;
 import com.TripLikeMovie.backend.domain.movie.domain.Movie;
 import com.TripLikeMovie.backend.domain.movie.domain.repository.MovieRepository;
 import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
+import com.TripLikeMovie.backend.domain.post.domain.repository.PostRepository;
+import com.TripLikeMovie.backend.domain.post.domain.vo.PostInfoVo;
+import com.TripLikeMovie.backend.domain.post.presentation.dto.response.AllPostResponse;
 import com.TripLikeMovie.backend.global.error.exception.movie.DuplicatedMovieTitleException;
 import com.TripLikeMovie.backend.global.error.exception.movie.NotFoundMovieException;
 import com.TripLikeMovie.backend.global.utils.image.ImageUtils;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +24,8 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
     private final ImageUtils imageUtils;
+    private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -59,16 +66,52 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<MovieInfoVo> findByTitle(String title) {
-            // title이 null 또는 비어 있으면 모든 영화 반환
-            if (title == null || title.trim().isEmpty()) {
-                return movieRepository.findAll().stream()
-                    .map(Movie ::getMovieInfo)
-                    .toList();
-            }
-
-            // title이 주어졌다면 검색
-            return movieRepository.findByTitleContainingIgnoreCase(title).stream()
-                .map(Movie :: getMovieInfo)
+        // title이 null 또는 비어 있으면 모든 영화 반환
+        if (title == null || title.trim().isEmpty()) {
+            return movieRepository.findAll().stream()
+                .map(Movie::getMovieInfo)
                 .toList();
+        }
+
+        // title이 주어졌다면 검색
+        return movieRepository.findByTitleContainingIgnoreCase(title).stream()
+            .map(Movie::getMovieInfo)
+            .toList();
     }
+
+    @Override
+    public List<MovieInfoVo> rankingMovies() {
+
+        return movieRepository.findTop3Movies().stream()
+            .map(Movie::getMovieInfo)
+            .toList();
+    }
+
+    @Override
+    public List<AllPostResponse> getAllPosts(Integer movieId) {
+        // 영화 조회
+        Movie movie = movieRepository.findById(movieId)
+            .orElseThrow(() -> NotFoundMovieException.EXCEPTION);
+
+        // 영화에 관련된 게시물 목록을 AllPostResponse로 변환
+        List<AllPostResponse> postResponses = movie.getPosts().stream()
+            .map(
+                post -> {
+                    PostInfoVo postInfoVo = post.getPostInfoVo();
+                    // 각 게시물에 대해 AllPostResponse 객체 생성
+                    AllPostResponse response = new AllPostResponse();
+                    response.setId(postInfoVo.getId());
+                    response.setFirstImageUrl(postInfoVo.getImageUrls().get(0));
+                    response.setMovieTitle(movie.getTitle());
+                    response.setMemberId(postInfoVo.getAuthorId());
+                    response.setMemberNickname(postInfoVo.getAuthorNickname());
+                    response.setMemberImageUrl(postInfoVo.getAuthorImageUrl());
+                    return response;
+                })
+            .collect(Collectors.toList());
+
+        // 필요한 경우, 이 List를 반환하거나 다른 형태로 변환하여 반환할 수 있습니다.
+        return postResponses;  // List<AllPostResponse>로 반환
+    }
+
 }
