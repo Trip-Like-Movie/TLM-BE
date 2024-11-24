@@ -13,4 +13,7 @@ public class AllPostResponse {
     private Integer MemberId;
     private String memberNickname;
     private String memberImageUrl;
+
+    private Integer likedCount;
+    private Integer commentsCount;
 }
