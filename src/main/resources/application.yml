@@ -43,3 +43,9 @@ auth:
     header: ${JWT_HEADER}
     prefix: ${JWT_PREFIX}
 
+
+openai:
+  model: gpt-4
+  api:
+    key: ${OPENAI_API_KEY}
+    url: https://api.openai.com/v1/chat/completions
