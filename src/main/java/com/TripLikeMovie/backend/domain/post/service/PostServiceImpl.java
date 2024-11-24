@@ -2,6 +2,7 @@ package com.TripLikeMovie.backend.domain.post.service;
 
 import com.TripLikeMovie.backend.domain.like.domain.repository.LikeRepository;
 import com.TripLikeMovie.backend.domain.member.domain.Member;
+import com.TripLikeMovie.backend.domain.member.domain.Role;
 import com.TripLikeMovie.backend.domain.movie.domain.Movie;
 import com.TripLikeMovie.backend.domain.post.domain.Post;
 import com.TripLikeMovie.backend.domain.post.domain.repository.PostRepository;
@@ -10,6 +11,7 @@ import com.TripLikeMovie.backend.domain.post.presentation.dto.request.UpdatePost
 import com.TripLikeMovie.backend.domain.post.presentation.dto.request.WritePostRequest;
 import com.TripLikeMovie.backend.domain.post.presentation.dto.response.AllPostResponse;
 import com.TripLikeMovie.backend.domain.post.presentation.dto.response.DetailPostResponse;
+import com.TripLikeMovie.backend.global.error.exception.post.PostDeletePermissionDeniedException;
 import com.TripLikeMovie.backend.global.error.exception.post.PostNotFoundException;
 import com.TripLikeMovie.backend.global.error.exception.post.PostNotMatchMemberException;
 import com.TripLikeMovie.backend.global.utils.image.ImageUtils;
@@ -104,7 +106,13 @@ public class PostServiceImpl implements PostService {
     public void deletePost(Integer postId) {
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> PostNotFoundException.EXCEPTION);
-        checkPostMember(post);
+
+        Member member = memberUtils.getMemberFromSecurityContext();
+
+        if (!member.equals(post.getMember()) && !member.getRole().equals(Role.ADMIN)) {
+            throw PostDeletePermissionDeniedException.EXCEPTION;
+        }
+
 
         List<String> imageUrls = post.getImageUrls();
 
