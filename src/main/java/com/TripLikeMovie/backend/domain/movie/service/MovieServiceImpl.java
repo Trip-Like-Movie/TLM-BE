@@ -1,10 +1,8 @@
 package com.TripLikeMovie.backend.domain.movie.service;
 
-import com.TripLikeMovie.backend.domain.member.domain.repository.MemberRepository;
 import com.TripLikeMovie.backend.domain.movie.domain.Movie;
 import com.TripLikeMovie.backend.domain.movie.domain.repository.MovieRepository;
 import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
-import com.TripLikeMovie.backend.domain.post.domain.repository.PostRepository;
 import com.TripLikeMovie.backend.domain.post.domain.vo.PostInfoVo;
 import com.TripLikeMovie.backend.domain.post.presentation.dto.response.AllPostResponse;
 import com.TripLikeMovie.backend.global.error.exception.movie.DuplicatedMovieTitleException;
