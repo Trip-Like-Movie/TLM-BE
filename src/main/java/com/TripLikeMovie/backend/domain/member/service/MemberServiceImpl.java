@@ -163,4 +163,10 @@ public class MemberServiceImpl implements MemberService {
             })
             .collect(Collectors.toList()); // 변환된 리스트 반환
     }
+
+    @Override
+    public void withdraw() {
+        Member member = memberUtils.getMemberFromSecurityContext();
+        memberRepository.delete(member);
+    }
 }

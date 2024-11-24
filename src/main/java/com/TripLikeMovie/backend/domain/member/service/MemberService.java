@@ -31,4 +31,6 @@ public interface MemberService {
     Member findById(Integer memberId);
 
     List<MemberAllPost> getAllPosts(Integer memberId);
+
+    void withdraw();
 }
