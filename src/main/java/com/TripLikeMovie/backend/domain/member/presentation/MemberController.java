@@ -124,4 +124,9 @@ public class MemberController {
         return memberService.getAllPosts(memberId);
     }
 
+    @DeleteMapping
+    public void deleteMember() {
+        memberService.withdraw();
+    }
+
 }
