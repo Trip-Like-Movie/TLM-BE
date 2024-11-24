@@ -80,26 +80,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void update(Integer postId, UpdatePostRequest updatePostRequest,
-        List<MultipartFile> images) {
+    public void update(Integer postId, UpdatePostRequest updatePostRequest) {
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> PostNotFoundException.EXCEPTION);
 
         checkPostMember(post);
 
-        post.update(updatePostRequest.getContent(), updatePostRequest.getLocationName(), updatePostRequest.getLocationAddress());
+        post.update(updatePostRequest.getContent());
 
-        List<String> imageUrls = post.getImageUrls();
-
-        for (String imageUrl : imageUrls) {
-            imageUtils.deleteImage(imageUrl);
-        }
-        imageUrls.clear();
-
-        for (MultipartFile image : images) {
-            String filePath = imageUtils.saveImage(image, "posts/");
-            post.addFilePath(filePath);
-        }
+        postRepository.save(post);
     }
 
     @Override

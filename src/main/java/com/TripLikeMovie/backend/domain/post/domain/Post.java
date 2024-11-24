@@ -55,7 +55,7 @@ public class Post {
     @JsonIgnore
     private Movie movie;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -107,9 +107,7 @@ public class Post {
             .build();
     }
 
-    public void update(String content, String locationName, String locationAddress) {
+    public void update(String content) {
         this.content = content;
-        this.locationName = locationName;
-        this.locationAddress = locationAddress;
     }
 }
