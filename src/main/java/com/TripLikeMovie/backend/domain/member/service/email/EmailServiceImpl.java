@@ -56,7 +56,7 @@ public class EmailServiceImpl implements EmailService {
                     <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden;">
                         <div style="padding: 20px; background: #0169ff; color: white; text-align: center;">
                             <h1 style="margin: 0; font-size: 24px;">TripLikeMovie</h1>
-                            <p style="margin: 5px 0; font-size: 16px;">영화같은 여행을 시작해보세요</p>
+                            <p style="margin: 5px 0; font-size: 16px;">영화같은 여행을 떠나보세요</p>
                         </div>
                         <div style="padding: 30px;">
                             <h2 style="color: #333; font-size: 20px; margin-bottom: 20px;">이메일 인증 안내</h2>
