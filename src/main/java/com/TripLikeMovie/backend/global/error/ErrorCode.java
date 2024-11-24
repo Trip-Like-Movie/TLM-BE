@@ -24,6 +24,7 @@ public enum ErrorCode {
     NOT_PROFILE_IMAGE(400, "프로필 사진이 존재하지 않습니다"),
     ALREADY_LIKED(400, "이미 좋아요를 눌렀습니다."),
     NOT_LIKE(400, "좋아요를 누르지 않았습니다."),
+    POST_DELETE_PERMISSION_DENIED(400, "게시글을 삭제할 수 없습니다."),
 
     INVALID_TOKEN(401, "토큰이 유효하지 않습니다."),
     EXPIRED_TOKEN(401, "토큰이 만료되었습니다."),
