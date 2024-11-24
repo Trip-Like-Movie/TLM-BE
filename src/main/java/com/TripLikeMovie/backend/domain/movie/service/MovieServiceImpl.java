@@ -93,8 +93,8 @@ public class MovieServiceImpl implements MovieService {
         Movie movie = movieRepository.findById(movieId)
             .orElseThrow(() -> NotFoundMovieException.EXCEPTION);
 
-        // 영화에 관련된 게시물 목록을 AllPostResponse로 변환
-        List<AllPostResponse> postResponses = movie.getPosts().stream()
+
+        return movie.getPosts().stream()
             .map(
                 post -> {
                     PostInfoVo postInfoVo = post.getPostInfoVo();
@@ -108,10 +108,7 @@ public class MovieServiceImpl implements MovieService {
                     response.setMemberImageUrl(postInfoVo.getAuthorImageUrl());
                     return response;
                 })
-            .collect(Collectors.toList());
-
-        // 필요한 경우, 이 List를 반환하거나 다른 형태로 변환하여 반환할 수 있습니다.
-        return postResponses;  // List<AllPostResponse>로 반환
+            .collect(Collectors.toList());  // List<AllPostResponse>로 반환
     }
 
 }
