@@ -95,6 +95,7 @@ public class Member {
             .nickname(nickname)
             .imageUrl(profileImageUrl) // imageUrl이 null일 경우 null 반환
             .movies(sortedMovies) // 정렬된 영화 목록
+            .role(role.getValue())
             .build();
     }
 
