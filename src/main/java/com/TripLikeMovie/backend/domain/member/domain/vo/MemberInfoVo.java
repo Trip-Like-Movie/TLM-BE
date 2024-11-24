@@ -13,6 +13,7 @@ public class MemberInfoVo {
     private final String email;
     private final String nickname;
     private final String imageUrl;
-    private List<MovieInfoVo> movies; // 사용자와 관련된 영화 정보
+    private final String role;
+    private final List<MovieInfoVo> movies; // 사용자와 관련된 영화 정보
 
 }
