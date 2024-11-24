@@ -26,6 +26,7 @@ public class LikeServiceImpl implements LikeService {
         Like like = new Like(member, post);
         likeRepository.save(like);
         post.getLikes().add(like);
+        member.getLikes().add(like);
     }
 
     @Override
@@ -34,6 +35,7 @@ public class LikeServiceImpl implements LikeService {
             .orElseThrow(() -> NotLikedException.EXCEPTION);
         likeRepository.delete(like);
         post.getLikes().remove(like);
+        member.getLikes().remove(like);
     }
 
 

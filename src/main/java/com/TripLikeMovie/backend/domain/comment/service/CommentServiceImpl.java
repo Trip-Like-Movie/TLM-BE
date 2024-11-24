@@ -22,6 +22,8 @@ public class CommentServiceImpl implements CommentService {
     public void writeComment(Member member, Post post, WriteCommentRequest writeCommentRequest) {
         Comment comment = new Comment(member, post, writeCommentRequest.getContent());
         commentRepository.save(comment);
+        post.getComments().add(comment);
+        member.getComments().add(comment);
     }
 
     @Override
@@ -32,5 +34,7 @@ public class CommentServiceImpl implements CommentService {
             throw CommentNotMatchMemberException.EXCEPTION;
         }
         commentRepository.delete(comment);
+        post.getComments().remove(comment);
+        member.getComments().remove(comment);
     }
 }

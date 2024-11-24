@@ -1,7 +1,10 @@
 package com.TripLikeMovie.backend.domain.member.domain;
 
+import com.TripLikeMovie.backend.domain.comment.domain.Comment;
+import com.TripLikeMovie.backend.domain.like.domain.Like;
 import com.TripLikeMovie.backend.domain.member.domain.vo.MemberInfoVo;
 import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
+import com.TripLikeMovie.backend.domain.openai.domain.ConversationHistory;
 import com.TripLikeMovie.backend.domain.post.domain.Post;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -53,6 +56,15 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<ConversationHistory> conversationHistories = new ArrayList<>();
 
     public MemberInfoVo getMemberInfo() {
         // imageUrl이 null일 경우 null을 반환
