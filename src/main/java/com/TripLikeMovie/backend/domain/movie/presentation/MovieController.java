@@ -3,7 +3,7 @@ package com.TripLikeMovie.backend.domain.movie.presentation;
 import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
 import com.TripLikeMovie.backend.domain.movie.presentation.dto.request.CreateMovieRequest;
 import com.TripLikeMovie.backend.domain.movie.service.MovieService;
-import com.TripLikeMovie.backend.global.utils.image.ImageUtils;
+import com.TripLikeMovie.backend.domain.post.presentation.dto.response.AllPostResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -27,11 +27,14 @@ public class MovieController {
 
     private final ObjectMapper objectMapper;
 
-    private final ImageUtils imageUtils;
-
     @GetMapping("/{movieId}")
     public MovieInfoVo getMovie(@PathVariable Integer movieId) {
         return movieService.findById(movieId).getMovieInfo();
+    }
+
+    @GetMapping("/{movieId}/posts")
+    public List<AllPostResponse>  getAllPosts(@PathVariable Integer movieId) {
+        return movieService.getAllPosts(movieId);
     }
 
     @PostMapping(consumes = "multipart/form-data")
@@ -58,6 +61,11 @@ public class MovieController {
     @GetMapping
     public List<MovieInfoVo> getMovies(@RequestParam(required = false) String title) {
         return movieService.findByTitle(title);
+    }
+
+    @GetMapping("/ranking")
+    public List<MovieInfoVo> getRakingMovies() {
+        return movieService.rankingMovies();
     }
 
 }
