@@ -44,6 +44,8 @@ dependencies {
 // https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
 	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '9.1.0'
 
+	runtimeOnly 'org.apache.tomcat.embed:tomcat-embed-jasper'
+
 
 }
 
