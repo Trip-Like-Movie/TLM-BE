@@ -43,11 +43,13 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.6'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.6'
 
-	// JSTL 의존성에 버전 추가
-	implementation 'javax.servlet:jstl:1.2'
+    implementation 'javax.servlet:jstl:1.2'
 
-	// JSP 지원을 위한 톰캣 의존성
+// https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
+	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '9.1.0'
+
 	runtimeOnly 'org.apache.tomcat.embed:tomcat-embed-jasper'
+
 
 }
 

@@ -2,10 +2,10 @@ spring:
   application:
     name: TripLikeMovie
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:mysql://127.0.0.1:3306/TripLikeMovie
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
 
   mvc:
     view:
@@ -33,7 +33,10 @@ spring:
       max-file-size: 10MB  # 단일 파일 최대 크기
       max-request-size: 50MB  # 요청 전체 크기
 
-
+  mvc:
+    view:
+      prefix: /WEB-INF/views/    # View resolver prefix for JSP files
+      suffix: .jsp               # View resolver suffix for JSP files
 
 logging:
   level:
