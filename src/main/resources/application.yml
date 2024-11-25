@@ -33,11 +33,6 @@ spring:
       max-file-size: 10MB  # 단일 파일 최대 크기
       max-request-size: 50MB  # 요청 전체 크기
 
-  mvc:
-    view:
-      prefix: /WEB-INF/views/    # View resolver prefix for JSP files
-      suffix: .jsp               # View resolver suffix for JSP files
-
 logging:
   level:
     org.springframework.web: DEBUG
