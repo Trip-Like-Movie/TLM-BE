@@ -119,7 +119,7 @@ public class AdminController {
     }
 
     @GetMapping("/movie")
-    public String movieRegisterForm(Model model, HttpServletRequest request) {
+    public String movieRegisterForm( HttpServletRequest request) {
         Member admin = (Member)request.getSession().getAttribute("admin");
         if (admin == null) {
             String redirectUri = request.getRequestURL().toString();
