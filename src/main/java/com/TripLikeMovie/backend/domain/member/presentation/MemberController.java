@@ -124,6 +124,12 @@ public class MemberController {
         return memberService.getAllPosts(memberId);
     }
 
+    @GetMapping("/{memberId}/{movieId}/posts")
+    public List<MemberAllPost> getAllPostsByMovieId(@PathVariable("movieId") Integer movieId, @PathVariable("memberId") Integer memberId) {
+        return memberService.getAllPosts(memberId, movieId);
+    }
+
+
     @DeleteMapping
     public void deleteMember() {
         memberService.withdraw();

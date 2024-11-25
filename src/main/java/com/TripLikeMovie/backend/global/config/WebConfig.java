@@ -8,11 +8,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+            .allowedOriginPatterns("*")
+            .allowedMethods("GET", "POST", "PUT", "POST", "DELETE")
+            .allowedHeaders("*");
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 정적 리소스 매핑 설정
         registry.addResourceHandler("/uploads/**")
-            .addResourceLocations("file:/C:/Users/SSAFY/TLM/TLM-BE/uploads/"); // 실제 파일이 있는 경로
+            .addResourceLocations("file:/Users/kimjongchan/TripLikeMovie/TLM-BE/uploads/"); // 실제 파일이 있는 경로
     }
 }

@@ -10,6 +10,8 @@ public class AllPostResponse {
     private String firstImageUrl;
 
     private String movieTitle;
+    private Integer movieId;
+
     private Integer MemberId;
     private String memberNickname;
     private String memberImageUrl;
