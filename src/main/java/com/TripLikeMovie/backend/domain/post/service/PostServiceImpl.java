@@ -74,6 +74,8 @@ public class PostServiceImpl implements PostService {
             response.setMemberId(postInfoVo.getAuthorId()); // 게시글 작성자 ID
             response.setMemberNickname(postInfoVo.getAuthorNickname()); // 게시글 작성자 닉네임
             response.setMemberImageUrl(postInfoVo.getAuthorImageUrl()); // 게시글 작성자 이미지 URL
+            response.setLikedCount(postInfoVo.getLikeCount());
+            response.setCommentsCount(postInfoVo.getComments().size());
 
             return response; // 변환된 AllPostResponse 반환
         }).collect(Collectors.toList()); // List로 수집
