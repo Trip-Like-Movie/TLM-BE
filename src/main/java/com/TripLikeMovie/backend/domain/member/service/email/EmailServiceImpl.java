@@ -51,34 +51,34 @@ public class EmailServiceImpl implements EmailService {
 
     private String buildHtmlContent(String code) {
         return String.format("""
-            <html>
-                <body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #0169ff;">
-                    <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden;">
-                        <div style="padding: 20px; background: #0169ff; color: white; text-align: center;">
-                            <h1 style="margin: 0; font-size: 24px;">TripLikeMovie</h1>
-                            <p style="margin: 5px 0; font-size: 16px;">영화같은 여행을 떠나보세요</p>
-                        </div>
-                        <div style="padding: 30px;">
-                            <h2 style="color: #333; font-size: 20px; margin-bottom: 20px;">이메일 인증 안내</h2>
-                            <p style="font-size: 16px; color: #555; margin-bottom: 15px;">
-                                아래 인증 코드를 입력해주세요 인증 코드는 10분간 유효합니다.
-                            </p>
-                            <div style="text-align: center; margin: 20px 0;">
-                                <span style="display: inline-block; font-size: 24px; font-weight: bold; color: #0169ff; padding: 10px 20px; background: #f1f1f1; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                                    %s
-                                </span>
-                            </div>
-                            <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
-                                본 이메일은 자동 발신되었으며, 회신하지 마세요. 인증 코드는 타인과 공유하지 마십시오.
-                            </p>
-                        </div>
-                    </div>
-                    <footer style="text-align: center; font-size: 12px; color: #aaa; margin-top: 10px;">
-                        &copy; 2024 TripLikeMovie. All Rights Reserved.
-                    </footer>
-                </body>
-            </html>
-           """, code);
+             <html>
+                 <body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #0169ff;">
+                     <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                         <div style="padding: 20px; background: #0169ff; color: white; text-align: center;">
+                             <h1 style="margin: 0; font-size: 24px;">TripLikeMovie</h1>
+                             <p style="margin: 5px 0; font-size: 16px;">영화같은 여행을 떠나보세요</p>
+                         </div>
+                         <div style="padding: 30px;">
+                             <h2 style="color: #333; font-size: 20px; margin-bottom: 20px;">이메일 인증 안내</h2>
+                             <p style="font-size: 16px; color: #555; margin-bottom: 15px;">
+                                 아래 인증 코드를 입력해주세요 인증 코드는 10분간 유효합니다.
+                             </p>
+                             <div style="text-align: center; margin: 20px 0;">
+                                 <span style="display: inline-block; font-size: 24px; font-weight: bold; color: #0169ff; padding: 10px 20px; background: #f1f1f1; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                                     %s
+                                 </span>
+                             </div>
+                             <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
+                                 본 이메일은 자동 발신되었으며, 회신하지 마세요. 인증 코드는 타인과 공유하지 마십시오.
+                             </p>
+                         </div>
+                     </div>
+                     <footer style="text-align: center; font-size: 12px; color: #aaa; margin-top: 10px;">
+                         &copy; 2024 TripLikeMovie. All Rights Reserved.
+                     </footer>
+                 </body>
+             </html>
+            """, code);
     }
 
 
@@ -101,7 +101,8 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void verifyEmailCode(VerifyEmailCodeRequest verifyEmailCodeRequest) {
         String storedCode = verificationCods.get(verifyEmailCodeRequest.getEmail());
-        boolean isVerified = storedCode != null && storedCode.equals(verifyEmailCodeRequest.getCode());
+        boolean isVerified =
+            storedCode != null && storedCode.equals(verifyEmailCodeRequest.getCode());
 
         if (!isVerified) {
             throw InvalidVerificationCodeException.EXCEPTION;
@@ -143,34 +144,38 @@ public class EmailServiceImpl implements EmailService {
         String content = buildReportEmailContentForAdmin(member, post, reason);
         sendHtmlEmail("triplikemovie@gmail.com", subject, content);
     }
+
     private String buildReportEmailContentForAdmin(Member member, Post post, String reason) {
-        return String.format("""
-        <html>
-            <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333;">
-                <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden;">
-                    <div style="padding: 20px; background: #FF5722; color: white; text-align: center;">
-                        <h1 style="margin: 0; font-size: 24px;">TripLikeMovie 신고 알림</h1>
-                        <p style="margin: 5px 0; font-size: 16px;">새로운 게시물 신고가 접수되었습니다.</p>
-                    </div>
-                    <div style="padding: 30px;">
-                        <h2 style="color: #333; font-size: 20px; margin-bottom: 20px;">신고 세부 사항</h2>
-                        <p style="font-size: 16px; color: #555; margin-bottom: 10px;">
-                            <strong>신고자:</strong> %s<br>
-                            <strong>신고된 게시물 번호:</strong> %s<br>
-                            <strong>신고 사유:</strong> %s<br>
-                            <strong>신고 시각:</strong> %s
-                        </p>
-                        <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
-                            신고된 게시물에 대해 신속하게 조치를 취해주세요.
-                        </p>
-                    </div>
-                </div>
-                <footer style="text-align: center; font-size: 12px; color: #aaa; margin-top: 10px;">
-                    &copy; 2024 TripLikeMovie. All Rights Reserved.
-                </footer>
-            </body>
-        </html>
-    """, member.getNickname(), post.getId(), reason, LocalDateTime.now());
+        String reportUrl = "http://localhost:8080/api/v1/admin/post/" + post.getId();
+
+        StringBuilder emailContent = new StringBuilder();
+        emailContent.append("<html>")
+            .append("<body style=\"font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333;\">")
+            .append("<div style=\"max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden;\">")
+            .append("<div style=\"padding: 20px; background: #FF5722; color: white; text-align: center;\">")
+            .append("<h1 style=\"margin: 0; font-size: 24px;\">TripLikeMovie 신고 알림</h1>")
+            .append("<p style=\"margin: 5px 0; font-size: 16px;\">새로운 게시물 신고가 접수되었습니다.</p>")
+            .append("</div>")
+            .append("<div style=\"padding: 30px;\">")
+            .append("<h2 style=\"color: #333; font-size: 20px; margin-bottom: 20px;\">신고 세부 사항</h2>")
+            .append("<p style=\"font-size: 16px; color: #555; margin-bottom: 10px;\">")
+            .append("<strong>신고자:</strong> ").append(member.getNickname()).append("<br>")
+            .append("<strong>신고된 게시물 링크:</strong> <a href=\"").append(reportUrl).append("\" style=\"color: #0169ff; text-decoration: none;\">").append(reportUrl).append("</a><br>")
+            .append("<strong>신고 사유:</strong> ").append(reason).append("<br>")
+            .append("<strong>신고 시각:</strong> ").append(LocalDateTime.now()).append("<br>")
+            .append("</p>")
+            .append("<p style=\"font-size: 14px; color: #888; text-align: center; margin-top: 20px;\">")
+            .append("신고된 게시물에 대해 신속하게 조치를 취해주세요.")
+            .append("</p>")
+            .append("</div>")
+            .append("</div>")
+            .append("<footer style=\"text-align: center; font-size: 12px; color: #aaa; margin-top: 10px;\">")
+            .append("&copy; 2024 TripLikeMovie. All Rights Reserved.")
+            .append("</footer>")
+            .append("</body>")
+            .append("</html>");
+
+        return emailContent.toString();
     }
 
     private String generateVerificationCode() {

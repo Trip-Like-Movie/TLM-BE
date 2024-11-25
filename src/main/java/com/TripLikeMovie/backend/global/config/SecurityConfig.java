@@ -32,6 +32,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors
+                .configurationSource(CorsConfig.corsConfigurationSource()))
             .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(new ExceptionFilter(objectMapper), JwtTokenFilter.class)
             .formLogin(AbstractHttpConfigurer::disable)
