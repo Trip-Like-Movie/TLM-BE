@@ -33,4 +33,6 @@ public interface MemberService {
     List<MemberAllPost> getAllPosts(Integer memberId);
 
     void withdraw();
+
+    List<MemberAllPost> getAllPosts(Integer memberId, Integer movieId);
 }

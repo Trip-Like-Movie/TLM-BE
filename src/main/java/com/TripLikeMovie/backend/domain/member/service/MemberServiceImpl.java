@@ -148,8 +148,34 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberAllPost> getAllPosts(Integer memberId) {
         Member member = findById(memberId);
-        List<Post> posts = member.getPosts();
 
+        return convertToMemberAllPosts(member.getPosts());
+    }
+
+    @Override
+    public void withdraw() {
+        Member member = memberUtils.getMemberFromSecurityContext();
+        memberRepository.delete(member);
+    }
+
+    @Override
+    public List<MemberAllPost> getAllPosts(Integer memberId, Integer movieId) {
+        Member member = findById(memberId);  // 회원 정보 찾기
+        List<Post> posts = member.getPosts(); // 회원의 모든 게시물 목록 가져오기
+
+        // movieId가 주어진 movieId와 일치하는 게시물만 필터링
+        List<Post> filteredPosts = posts.stream()
+            .filter(post -> post.getMovie().getId().equals(movieId)) // movieId가 일치하는 게시물 필터링
+            .collect(Collectors.toList()); // 필터링된 결과를 리스트로 수집
+
+        // 필요한 형태로 변환해서 반환 (MemberAllPost 타입으로 변환한다고 가정)
+
+        return convertToMemberAllPosts(filteredPosts);
+    }
+
+    // MemberAllPost 타입으로 변환하는 메소드 (예시)
+    private List<MemberAllPost> convertToMemberAllPosts(List<Post> posts) {
+        // 변환 로직 구현
         return posts.stream()
             .map(post -> {
                 PostInfoVo postInfoVo = post.getPostInfoVo();
@@ -161,12 +187,7 @@ public class MemberServiceImpl implements MemberService {
                 memberAllPost.setLikeCount(postInfoVo.getLikeCount());
                 return memberAllPost;
             })
-            .collect(Collectors.toList()); // 변환된 리스트 반환
+            .collect(Collectors.toList()); //
     }
 
-    @Override
-    public void withdraw() {
-        Member member = memberUtils.getMemberFromSecurityContext();
-        memberRepository.delete(member);
-    }
 }
