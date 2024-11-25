@@ -6,7 +6,6 @@ import com.TripLikeMovie.backend.domain.movie.service.MovieService;
 import com.TripLikeMovie.backend.domain.post.domain.vo.PostInfoVo;
 import com.TripLikeMovie.backend.domain.post.presentation.dto.response.AllPostResponse;
 import com.TripLikeMovie.backend.domain.post.service.PostService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
