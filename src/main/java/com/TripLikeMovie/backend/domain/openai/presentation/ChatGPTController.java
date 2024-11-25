@@ -1,7 +1,6 @@
 package com.TripLikeMovie.backend.domain.openai.presentation;
 
 import com.TripLikeMovie.backend.domain.member.domain.Member;
-import com.TripLikeMovie.backend.domain.member.domain.vo.MemberInfoVo;
 import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
 import com.TripLikeMovie.backend.domain.openai.presentation.dto.response.MessageResponse;
 import com.TripLikeMovie.backend.domain.openai.service.ChatGPTService;
