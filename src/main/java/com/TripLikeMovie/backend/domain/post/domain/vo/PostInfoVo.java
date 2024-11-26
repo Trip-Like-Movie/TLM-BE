@@ -1,6 +1,7 @@
 package com.TripLikeMovie.backend.domain.post.domain.vo;
 
 import com.TripLikeMovie.backend.domain.comment.domain.vo.CommentVo;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,5 +25,8 @@ public class PostInfoVo {
     private Integer movieId;
     private String movieTitle;
     private String movieImageUrl;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 }

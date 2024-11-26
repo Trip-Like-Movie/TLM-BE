@@ -4,6 +4,7 @@ import com.TripLikeMovie.backend.domain.comment.domain.vo.CommentVo;
 import com.TripLikeMovie.backend.domain.member.domain.Member;
 import com.TripLikeMovie.backend.domain.member.domain.vo.MemberInfoVo;
 import com.TripLikeMovie.backend.domain.post.domain.Post;
+import com.TripLikeMovie.backend.global.database.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "comments")
 @NoArgsConstructor
-public class Comment {
+public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,6 +52,8 @@ public class Comment {
             .authorId(memberInfo.getId())
             .authorNickname(memberInfo.getNickname())
             .authorImageUrl(memberInfo.getImageUrl())
+            .createdAt(getCreatedAt())
+            .updatedAt(getUpdatedAt())
             .build();
     }
 

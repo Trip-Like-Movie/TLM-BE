@@ -1,5 +1,6 @@
 package com.TripLikeMovie.backend.domain.post.presentation.dto.response;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +19,7 @@ public class AllPostResponse {
 
     private Integer likedCount;
     private Integer commentsCount;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

@@ -1,5 +1,6 @@
 package com.TripLikeMovie.backend.domain.comment.domain.vo;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,5 +14,8 @@ public class CommentVo {
     private Integer authorId;
     private String authorNickname;
     private String authorImageUrl;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 }

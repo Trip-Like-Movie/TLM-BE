@@ -105,6 +105,8 @@ public class MovieServiceImpl implements MovieService {
                     response.setCommentsCount(postInfoVo.getComments().size());
                     response.setMemberNickname(postInfoVo.getAuthorNickname());
                     response.setMemberImageUrl(postInfoVo.getAuthorImageUrl());
+                    response.setCreatedAt(postInfoVo.getCreatedAt());
+                    response.setUpdatedAt(postInfoVo.getUpdatedAt());
                     return response;
                 })
             .collect(Collectors.toList());  // List<AllPostResponse>로 반환

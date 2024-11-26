@@ -185,6 +185,8 @@ public class MemberServiceImpl implements MemberService {
                 memberAllPost.setCommentsSize(postInfoVo.getComments().size());
                 memberAllPost.setFirstImageUrl(postInfoVo.getImageUrls().get(0));
                 memberAllPost.setLikeCount(postInfoVo.getLikeCount());
+                memberAllPost.setCreatedAt(postInfoVo.getCreatedAt());
+                memberAllPost.setUpdatedAt(postInfoVo.getUpdatedAt());
                 return memberAllPost;
             })
             .collect(Collectors.toList()); //

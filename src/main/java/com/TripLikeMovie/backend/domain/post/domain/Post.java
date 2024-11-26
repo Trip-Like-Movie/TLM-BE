@@ -7,6 +7,7 @@ import com.TripLikeMovie.backend.domain.member.domain.vo.MemberInfoVo;
 import com.TripLikeMovie.backend.domain.movie.domain.Movie;
 import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
 import com.TripLikeMovie.backend.domain.post.domain.vo.PostInfoVo;
+import com.TripLikeMovie.backend.global.database.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
@@ -29,7 +30,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "posts")
 @Getter
 @NoArgsConstructor
-public class Post {
+public class Post extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -104,6 +105,8 @@ public class Post {
             .authorId(memberInfo.getId())
             .authorNickname(memberInfo.getNickname())
             .authorImageUrl(memberInfo.getImageUrl())
+            .createdAt(getCreatedAt())
+            .updatedAt(getUpdatedAt())
             .build();
     }
 
