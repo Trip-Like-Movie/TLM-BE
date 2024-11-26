@@ -160,9 +160,9 @@ public class AdminController {
         }
 
         // 영화 생성
-        movieService.createMovie(movieData, moviePoster);
+        Integer movieId = movieService.createMovie(movieData, moviePoster);
 
-        return "redirect:/api/v1/admin/movies";
+        return "redirect:/api/v1/admin/movie/" + movieId;
     }
 
     @GetMapping("/movies")
