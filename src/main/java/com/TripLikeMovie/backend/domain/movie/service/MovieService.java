@@ -13,7 +13,7 @@ public interface MovieService {
 
     void duplicateTitle(String title);
 
-    void createMovie(String title, MultipartFile filePath);
+    Integer createMovie(String title, MultipartFile filePath);
 
     void updateMoviePoster(Integer movieId, MultipartFile moviePoster);
 

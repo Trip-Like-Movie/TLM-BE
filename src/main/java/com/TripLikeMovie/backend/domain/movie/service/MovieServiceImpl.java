@@ -39,10 +39,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void createMovie(String title, MultipartFile multipartFile) {
+    public Integer createMovie(String title, MultipartFile multipartFile) {
         String filePath = imageUtils.saveImage(multipartFile, "movies/");
         Movie movie = new Movie(title, filePath);
         movieRepository.save(movie);
+        return movie.getId();
     }
 
     @Override
