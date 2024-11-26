@@ -41,7 +41,7 @@
                 <!-- 제목: 왼쪽 정렬 -->
                 <h2 class="text-3xl font-bold text-left">${movie.title}</h2>
                 <!-- 삭제하기 버튼: 오른쪽 정렬 -->
-                <form action="/api/v1/admin/movie/delete/${post.id}" method="post"
+                <form action="/api/v1/admin/movie/delete/${movie.id}" method="post"
                       onsubmit="return confirm('정말 삭제하시겠습니까?');">
                     <button type="submit"
                             class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-700 focus:outline-none">

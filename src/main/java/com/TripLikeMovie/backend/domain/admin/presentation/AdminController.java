@@ -2,6 +2,7 @@ package com.TripLikeMovie.backend.domain.admin.presentation;
 
 import com.TripLikeMovie.backend.domain.admin.service.AdminService;
 import com.TripLikeMovie.backend.domain.member.domain.Member;
+import com.TripLikeMovie.backend.domain.movie.domain.Movie;
 import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
 import com.TripLikeMovie.backend.domain.movie.service.MovieService;
 import com.TripLikeMovie.backend.domain.post.domain.vo.PostInfoVo;
@@ -112,8 +113,14 @@ public class AdminController {
 
 
     @PostMapping("/post/{postId}")
-    public String deletePost(@PathVariable Integer postId) {
+    public String deletePost(@PathVariable Integer postId, HttpServletRequest request) {
 
+        Member admin = (Member)request.getSession().getAttribute("admin");
+        if (admin == null) {
+            String redirectUri = request.getRequestURL().toString();
+            request.getSession().setAttribute("redirectUri", redirectUri);
+            return "redirect:/api/v1/admin/login";
+        }
         adminService.deletePost(postId);
 
         return "redirect:/api/v1/admin/post";
@@ -134,7 +141,15 @@ public class AdminController {
     public String createMovie(
         @RequestPart("movieData") String movieData,
         @RequestPart("moviePoster") MultipartFile moviePoster,
-        Model model) {
+        Model model,
+        HttpServletRequest request) {
+
+        Member admin = (Member)request.getSession().getAttribute("admin");
+        if (admin == null) {
+            String redirectUri = request.getRequestURL().toString();
+            request.getSession().setAttribute("redirectUri", redirectUri);
+            return "redirect:/api/v1/admin/login";
+        }
 
         try {
             movieService.duplicateTitle(movieData);
@@ -177,6 +192,22 @@ public class AdminController {
         model.addAttribute("movie", movieInfo);
         return "admin/movie";
     }
+
+    @PostMapping("/movie/delete/{movieId}")
+    public String deleteMovie(@PathVariable Integer movieId, HttpServletRequest request) {
+        Member admin = (Member)request.getSession().getAttribute("admin");
+        if (admin == null) {
+            String redirectUri = request.getRequestURL().toString();
+            request.getSession().setAttribute("redirectUri", redirectUri);
+            return "redirect:/api/v1/admin/login";
+        }
+
+        Movie movie = movieService.findById(movieId);
+        movieService.delete(movie.getId());
+        return "redirect:/api/v1/admin/movies";
+
+    }
+
 
 
 }

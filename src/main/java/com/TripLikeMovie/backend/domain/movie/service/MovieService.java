@@ -22,4 +22,6 @@ public interface MovieService {
     List<MovieInfoVo> rankingMovies();
 
     List<AllPostResponse> getAllPosts(Integer movieId);
+
+    void delete(Integer id);
 }

@@ -112,4 +112,9 @@ public class MovieServiceImpl implements MovieService {
             .collect(Collectors.toList());  // List<AllPostResponse>로 반환
     }
 
+    @Override
+    public void delete(Integer id) {
+        movieRepository.deleteById(id);
+    }
+
 }
