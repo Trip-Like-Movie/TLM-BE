@@ -44,7 +44,6 @@
             <!-- 카드 내용 -->
             <div class="p-4 flex flex-col items-start">
                 <h2 class="text-lg font-bold text-gray-800 mb-3"><%= movie.getTitle() %></h2>
-                <p class="text-base text-gray-600 mb-4">ID: <%= movie.getId() %></p>
                 <a href="/api/v1/admin/movie/<%= movie.getId() %>"
                    class="text-blue-500 hover:text-blue-700 font-semibold underline mt-auto text-base">
                     자세히 보기
