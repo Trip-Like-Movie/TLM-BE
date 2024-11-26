@@ -103,7 +103,7 @@ public class AdminController {
                 return "redirect:" + redirectUri;  // 원래 요청한 URL로 리다이렉트
             }
 
-            return "redirect:/";  // 기본 페이지로 리다이렉트
+            return "redirect:/api/v1/admin/post";  // 기본 페이지로 리다이렉트
         }
 
         model.addAttribute("error", "잘못된 아이디 또는 비밀번호입니다.");
@@ -162,6 +162,20 @@ public class AdminController {
         List<MovieInfoVo> movies = movieService.findByTitle(null);
         model.addAttribute("movies", movies);
         return "admin/movies";
+    }
+
+    @GetMapping("/movie/{movieId}")
+    public String getMovie(@PathVariable Integer movieId, Model model, HttpServletRequest request) {
+        Member admin = (Member)request.getSession().getAttribute("admin");
+        if (admin == null) {
+            String redirectUri = request.getRequestURL().toString();
+            request.getSession().setAttribute("redirectUri", redirectUri);
+            return "redirect:/api/v1/admin/login";
+        }
+
+        MovieInfoVo movieInfo = movieService.findById(movieId).getMovieInfo();
+        model.addAttribute("movie", movieInfo);
+        return "admin/movie";
     }
 
 
