@@ -35,7 +35,7 @@
     <div class="w-3/5 h-full flex flex-col items-center justify-between overflow-hidden">
         <div class="w-full flex justify-between items-center px-12 mt-4">
             <!-- 영화 제목은 가운데 정렬 -->
-            <h2 class="text-xl font-bold mx-auto">${movie.}</h2>
+            <h2 class="text-xl font-bold mx-auto">${post.movieTitle}</h2>
 
             <!-- 삭제하기 버튼은 오른쪽에 위치 -->
             <form action="/api/v1/admin/post/${post.id}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
