@@ -21,6 +21,7 @@
     <div class="flex items-center space-x-4">
         <a href="${pageContext.request.contextPath}/api/v1/admin/movie" class="btn btn-ghost text-primary text-lg mr-4">영화 등록하러 가기</a>
         <a href="${pageContext.request.contextPath}/api/v1/admin/post" class="btn btn-ghost text-primary text-lg mr-4">게시글 목록 보기</a>
+        <a href="${pageContext.request.contextPath}/api/v1/admin/movies" class="btn btn-ghost text-primary text-lg mr-4">영화 목록 보기</a>
     </div>
 </div>
 

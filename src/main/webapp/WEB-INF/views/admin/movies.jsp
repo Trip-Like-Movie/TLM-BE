@@ -21,6 +21,7 @@
     <div class="flex items-center space-x-4">
         <a href="${pageContext.request.contextPath}/api/v1/admin/movie" class="btn btn-ghost text-primary text-lg mr-4">영화 등록하러 가기</a>
         <a href="${pageContext.request.contextPath}/api/v1/admin/post" class="btn btn-ghost text-primary text-lg mr-4">게시글 목록 보기</a>
+        <a href="${pageContext.request.contextPath}/api/v1/admin/movies" class="btn btn-ghost text-primary text-lg mr-4">영화 목록 보기</a>
     </div>
 </div>
 
@@ -44,7 +45,7 @@
             <div class="p-4 flex flex-col items-start">
                 <h2 class="text-lg font-bold text-gray-800 mb-3"><%= movie.getTitle() %></h2>
                 <p class="text-base text-gray-600 mb-4">ID: <%= movie.getId() %></p>
-                <a href="/api/v1/admin/post/<%= movie.getId() %>"
+                <a href="/api/v1/admin/movie/<%= movie.getId() %>"
                    class="text-blue-500 hover:text-blue-700 font-semibold underline mt-auto text-base">
                     자세히 보기
                 </a>

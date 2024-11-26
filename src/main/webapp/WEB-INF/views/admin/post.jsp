@@ -26,6 +26,7 @@
     <div class="flex items-center space-x-4">
         <a href="${pageContext.request.contextPath}/api/v1/admin/movie" class="btn btn-ghost text-primary text-lg mr-4">영화 등록하러 가기</a>
         <a href="${pageContext.request.contextPath}/api/v1/admin/post" class="btn btn-ghost text-primary text-lg mr-4">게시글 목록 보기</a>
+        <a href="${pageContext.request.contextPath}/api/v1/admin/movies" class="btn btn-ghost text-primary text-lg mr-4">영화 목록 보기</a>
     </div>
 </div>
 
@@ -34,7 +35,7 @@
     <div class="w-3/5 h-full flex flex-col items-center justify-between overflow-hidden">
         <div class="w-full flex justify-between items-center px-12 mt-4">
             <!-- 영화 제목은 가운데 정렬 -->
-            <h2 class="text-xl font-bold mx-auto">${post.movieTitle}</h2>
+            <h2 class="text-xl font-bold mx-auto">${movie.}</h2>
 
             <!-- 삭제하기 버튼은 오른쪽에 위치 -->
             <form action="/api/v1/admin/post/${post.id}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
