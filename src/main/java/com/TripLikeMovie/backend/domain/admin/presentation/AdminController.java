@@ -162,7 +162,7 @@ public class AdminController {
         // 영화 생성
         movieService.createMovie(movieData, moviePoster);
 
-        return "redirect:/api/v1/admin/post";
+        return "redirect:/api/v1/admin/movies";
     }
 
     @GetMapping("/movies")
