@@ -34,22 +34,24 @@
             if (movies != null && !movies.isEmpty()) {
                 for (MovieInfoVo movie : movies) {
         %>
-        <!-- 영화 카드 -->
-        <div class="bg-white shadow-md rounded-lg border border-gray-200 overflow-hidden">
-            <!-- 이미지 -->
-
-            <img src="http://localhost:8080/<%= movie.getImageUrl() %>" alt="<%= movie.getTitle() %>"
-                 class="w-full h-48 object-cover">
+        <!-- 세로로 더 긴 카드 레이아웃 -->
+        <div class="bg-white shadow-md rounded-lg border border-gray-200 overflow-hidden flex flex-col max-w-xs">
+            <!-- 이미지 영역 -->
+            <img src="http://localhost:8080/<%= movie.getImageUrl() %>"
+                 alt="<%= movie.getTitle() %>"
+                 class="w-full h-72 object-cover">
             <!-- 카드 내용 -->
-            <div class="p-4">
-                <h2 class="text-lg font-bold text-gray-800"><%= movie.getTitle() %></h2>
-                <p class="text-gray-600">ID: <%= movie.getId() %></p>
+            <div class="p-4 flex flex-col items-start">
+                <h2 class="text-lg font-bold text-gray-800 mb-3"><%= movie.getTitle() %></h2>
+                <p class="text-base text-gray-600 mb-4">ID: <%= movie.getId() %></p>
                 <a href="/api/v1/admin/post/<%= movie.getId() %>"
-                   class="text-blue-500 hover:text-blue-700 font-semibold underline mt-2 block">
+                   class="text-blue-500 hover:text-blue-700 font-semibold underline mt-auto text-base">
                     자세히 보기
                 </a>
             </div>
         </div>
+
+
         <%
             }
         } else {
