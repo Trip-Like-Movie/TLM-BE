@@ -49,6 +49,7 @@ public class CredentialServiceImpl implements CredentialService{
             .hashedPassword(encodedPassword)
             .nickname(signUpRequest.getNickname())
             .role(Role.USER)
+            .imageUrl("/Users/kimjongchan/TripLikeMovie/TLM-BE/uploads/profiles/image.png")
             .build();
 
         memberRepository.save(member);
