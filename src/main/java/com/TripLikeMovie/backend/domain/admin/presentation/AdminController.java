@@ -2,6 +2,7 @@ package com.TripLikeMovie.backend.domain.admin.presentation;
 
 import com.TripLikeMovie.backend.domain.admin.service.AdminService;
 import com.TripLikeMovie.backend.domain.member.domain.Member;
+import com.TripLikeMovie.backend.domain.movie.domain.vo.MovieInfoVo;
 import com.TripLikeMovie.backend.domain.movie.service.MovieService;
 import com.TripLikeMovie.backend.domain.post.domain.vo.PostInfoVo;
 import com.TripLikeMovie.backend.domain.post.presentation.dto.response.AllPostResponse;
@@ -126,9 +127,7 @@ public class AdminController {
             request.getSession().setAttribute("redirectUri", redirectUri);
             return "redirect:/api/v1/admin/login";
         }
-
-
-        return "admin/movie";
+        return "admin/movieForm";
     }
 
     @PostMapping(value = "/movie", consumes = "multipart/form-data")
@@ -137,21 +136,32 @@ public class AdminController {
         @RequestPart("moviePoster") MultipartFile moviePoster,
         Model model) {
 
-        // movieData를 CreateMovieRequest로 변환
-
-        // 영화 제목 중복 검사
         try {
             movieService.duplicateTitle(movieData);
         } catch (Exception e) {
             // 예외 메시지를 model에 추가하여 뷰로 전달
             model.addAttribute("errorMessage", "영화 제목이 이미 존재합니다.");
-            return "admin/movie"; // 예외가 발생한 경우 영화 등록 페이지로 돌아감
+            return "admin/movieForm"; // 예외가 발생한 경우 영화 등록 페이지로 돌아감
         }
 
         // 영화 생성
         movieService.createMovie(movieData, moviePoster);
 
         return "redirect:/api/v1/admin/post";
+    }
+
+    @GetMapping("/movies")
+    public String getAllMovies(Model model, HttpServletRequest request) {
+        Member admin = (Member)request.getSession().getAttribute("admin");
+        if (admin == null) {
+            String redirectUri = request.getRequestURL().toString();
+            request.getSession().setAttribute("redirectUri", redirectUri);
+            return "redirect:/api/v1/admin/login";
+        }
+
+        List<MovieInfoVo> movies = movieService.findByTitle(null);
+        model.addAttribute("movies", movies);
+        return "admin/movies";
     }
 
 
